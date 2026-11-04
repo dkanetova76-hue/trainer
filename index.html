@@ -1,0 +1,1688 @@
+<title>Тренажёр по ИТ-управлению</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow reading column (~720px); a sticky bar with course code and progress; one task per screen. */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --fg:#16212b; --muted:#5a6774; --line:#d8dee5;
+  --accent:#0b6b62; --accent-soft:#e2f1ef; --accent-fg:#ffffff;
+  --good:#1f7a3a; --good-soft:#e3f3e7; --bad:#b3261e; --bad-soft:#fbe7e5; --warn:#8a5a00; --warn-soft:#fbf0d9;
+  --b1:#c9e4e0; --b2:#9fd0c8; --b3:#6db6aa; --b4:#3f998b; --b5:#1f7a6d; --b6:#0b5a50;
+  --display:"Unbounded","IBM Plex Sans",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1519; --surface:#172027; --fg:#e6ecf0; --muted:#9aa8b3; --line:#2b3741;
+  --accent:#4cc3b3; --accent-soft:#163b37; --accent-fg:#06201d;
+  --good:#6fd08a; --good-soft:#173322; --bad:#ff8a80; --bad-soft:#3a1c1a; --warn:#f2c46b; --warn-soft:#3a2e14;
+  --b1:#1d3c38; --b2:#235750; --b3:#2b7368; --b4:#349183; --b5:#45b0a0; --b6:#6fd0c1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1519; --surface:#172027; --fg:#e6ecf0; --muted:#9aa8b3; --line:#2b3741;
+  --accent:#4cc3b3; --accent-soft:#163b37; --accent-fg:#06201d;
+  --good:#6fd08a; --good-soft:#173322; --bad:#ff8a80; --bad-soft:#3a1c1a; --warn:#f2c46b; --warn-soft:#3a2e14;
+  --b1:#1d3c38; --b2:#235750; --b3:#2b7368; --b4:#349183; --b5:#45b0a0; --b6:#6fd0c1; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+.bar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;color:var(--fg)}
+.brand small{display:block;font-family:var(--mono);font-weight:400;font-size:11px;color:var(--muted);letter-spacing:.04em}
+.bar nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.navlink{font-size:14px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.navlink:hover,.navlink[aria-current="page"]{color:var(--fg);background:var(--bg)}
+main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{text-wrap:balance;margin:0}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,5vw,34px);line-height:1.15;letter-spacing:-.01em}
+h2{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
+h3{font-size:16px;font-weight:600}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted);font-size:17px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.ch{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);text-decoration:none;color:var(--fg);min-height:112px}
+.ch:hover{border-color:var(--accent)}
+.ch .code{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.ch .t{font-weight:600}
+.ch.off{opacity:.55;pointer-events:none}
+.ch .st{margin-top:auto;font-size:13px;color:var(--accent)}
+.ch.off .st{color:var(--muted)}
+.btn{font:inherit;font-weight:600;font-size:15px;border-radius:8px;padding:10px 18px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.opt:focus-within,.navlink:focus-visible,select:focus-visible,.hs:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+.meta{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:12px;padding:3px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.bl{border-color:transparent;color:var(--fg)}
+.progress{display:flex;gap:4px;flex-wrap:wrap}
+.dot{width:22px;height:6px;border-radius:3px;background:var(--line);border:0;padding:0;cursor:pointer}
+.dot.done{background:var(--b3)}
+.dot.cur{background:var(--accent)}
+.qtext{font-size:18px;line-height:1.5;font-weight:500}
+.hint{font-size:14px;color:var(--muted)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--surface)}
+.opt:hover{border-color:var(--accent)}
+.opt input{margin-top:4px;accent-color:var(--accent);flex:none}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.match{display:flex;flex-direction:column;gap:10px}
+.mrow{display:grid;grid-template-columns:1fr minmax(0,1fr);gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
+@media (max-width:560px){.mrow{grid-template-columns:1fr}}
+select{font:inherit;font-size:15px;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);width:100%;min-width:0}
+.order{display:flex;flex-direction:column;gap:8px;list-style:none;padding:0;margin:0}
+.order li{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.order .n{font-family:var(--mono);font-size:13px;color:var(--muted);width:22px;flex:none}
+.order .tx{flex:1;min-width:0}
+.mv{font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;width:34px;height:30px;cursor:pointer}
+.mv:disabled{opacity:.3;cursor:default}
+.svgbox{overflow-x:auto}
+.svgbox svg{display:block;width:100%;max-width:520px;height:auto;min-width:280px;margin:0 auto}
+.hs{cursor:pointer}
+.hs rect,.hs circle,.hs polygon{fill:var(--surface);stroke:var(--muted);stroke-width:1.5;transition:fill .12s}
+.hs:hover rect,.hs:hover circle,.hs:hover polygon{stroke:var(--accent)}
+.hs.on rect,.hs.on circle,.hs.on polygon{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.5}
+.hs text{fill:var(--fg);font-family:var(--body);font-size:17px;font-weight:600;pointer-events:none}
+.hs.side rect{fill:var(--bg)}
+.hs.side.on rect{fill:var(--accent-soft)}
+.score{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.big{font-family:var(--display);font-weight:700;font-size:56px;line-height:1;font-variant-numeric:tabular-nums}
+.verdict{padding:6px 12px;border-radius:99px;font-weight:600;font-size:14px}
+.verdict.ok{background:var(--good-soft);color:var(--good)}
+.verdict.no{background:var(--warn-soft);color:var(--warn)}
+.bars{display:flex;flex-direction:column;gap:10px}
+.barrow{display:grid;grid-template-columns:minmax(120px,190px) 1fr 52px;gap:12px;align-items:center}
+@media (max-width:520px){.barrow{grid-template-columns:1fr 52px}.barrow .track{grid-column:1/-1;order:3}}
+.barrow .lab{font-size:14px;min-width:0}
+.barrow .lab b{font-family:var(--mono);font-weight:500;margin-right:6px}
+.track{height:10px;background:var(--bg);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.fill{height:100%;background:var(--accent)}
+.pct{font-family:var(--mono);font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+.review{display:flex;flex-direction:column;gap:10px}
+.rv{border-left:4px solid var(--line);padding:10px 14px;background:var(--surface);border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:6px}
+.rv.g{border-color:var(--good)} .rv.p{border-color:var(--warn)} .rv.b{border-color:var(--bad)}
+.rv .head{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.rv .mark{font-family:var(--mono);font-size:13px;font-weight:500}
+.rv.g .mark{color:var(--good)} .rv.p .mark{color:var(--warn)} .rv.b .mark{color:var(--bad)}
+.rv .why{font-size:14px;color:var(--muted)}
+.note{font-size:14px;padding:10px 14px;border-radius:8px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.note.ok{background:var(--good-soft);border-color:transparent;color:var(--good)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+.tbl{overflow-x:auto}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.flag{font-family:var(--mono);font-size:12px;padding:2px 6px;border-radius:4px}
+.flag.easy{background:var(--warn-soft);color:var(--warn)} .flag.hard{background:var(--bad-soft);color:var(--bad)} .flag.okk{background:var(--good-soft);color:var(--good)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:14px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.seg button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.seg button:disabled{cursor:default;opacity:.7}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.conf{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px dashed var(--line)}
+.fb{padding:12px 14px;border-radius:8px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.fb.g{background:var(--good-soft)} .fb.p{background:var(--warn-soft)} .fb.b{background:var(--bad-soft)}
+.fb b{font-weight:600}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:13px;color:var(--muted)}
+input[type=text],input[type=number]{font:inherit;font-size:15px;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);width:100%;min-width:0}
+input[type=number]{width:84px;font-family:var(--mono)}
+.quad{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14px}
+.quad .hd{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;align-self:end;padding:0 4px}
+.quad .cell{padding:10px 12px;border-radius:8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.quad .cell strong{font-family:var(--mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.quad .cell span{font-size:13px}
+.q-cc{background:var(--good-soft)} .q-uc{background:var(--accent-soft)} .q-uw{background:var(--warn-soft)} .q-cw{background:var(--bad-soft)}
+.q-cw strong{color:var(--bad)}
+.ideal{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+details{border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:var(--surface)}
+details summary{cursor:pointer;font-size:14px;font-weight:600}
+details[open] summary{margin-bottom:8px}
+.dist{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.dist .barrow{grid-template-columns:minmax(0,1fr) 120px 48px}
+.dist .ok{color:var(--good);font-weight:600}
+.dist .dead{color:var(--warn)}
+.flag.key,.flag.cw{background:var(--bad-soft);color:var(--bad)} .flag.lowd{background:var(--warn-soft);color:var(--warn)}
+.flags{display:flex;gap:4px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.kpi strong{font-family:var(--display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+.kpi.warn{border-color:var(--warn)}
+.ang{display:flex;flex-direction:column;gap:6px}
+.ang .r{display:grid;grid-template-columns:36px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:14px}
+</style>
+
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="#">Тренажёр по ИТ-управлению<small>710500 · Управление ИТ-инфраструктурой и ИТ-сервисами</small></a>
+  <nav id="nav"><a class="navlink" href="#">Главы</a></nav>
+</div></header>
+<main><div class="wrap" id="app"></div></main>
+
+<script>
+(() => {
+const BLOOM = ["", "Запоминание", "Понимание", "Применение", "Анализ", "Оценка", "Создание"];
+const RO = {
+  "1.1": "Описывает состав ИТ-инфраструктуры по уровням и цепочки зависимостей услуг (ПК-9)",
+  "1.2": "Сравнивает модели ИТ-службы и обосновывает выбор (ПК-15)",
+  "1.3": "Описывает ИТ-услугу через полезность и гарантию (ПК-12)",
+  "1.4": "Выбирает стандарт или свод практик под задачу (ПК-11)",
+  "1.5": "Определяет требования законодательства КР к ИТ-службе (ПК-24)",
+  "2.1": "Объясняет назначение архитектуры предприятия и её связь со стратегией (ПК-2)",
+  "2.2": "Описывает организацию по четырём доменам архитектуры (ПК-2, ПК-3)",
+  "2.3": "Сравнивает фреймворки архитектуры и выбирает подходящий (ПК-11)",
+  "2.4": "Применяет фазы TOGAF ADM для планирования изменений (ПК-17)",
+  "2.5": "Проводит анализ разрывов и обосновывает дорожную карту (ПК-17)",
+  "3.1": "Планирует обследование: цели, этапы, методы (ПК-9)",
+  "3.2": "Проводит инвентаризацию и строит карту зависимостей (ПК-9)",
+  "3.3": "Оценивает уровень возможностей процессов по COBIT 2019 (ПК-9, ПК-11)",
+  "3.4": "Моделирует процесс в BPMN 2.0 (ПК-3, ПК-17)",
+  "3.5": "Выявляет потери и обосновывает совершенствование процесса (ПК-8, ПК-17)",
+  "4.1": "Объясняет понятия ценности, услуги, продукта и ролей потребителя (ПК-12)",
+  "4.2": "Описывает систему ценности и активности жизненного цикла продукта и услуги (ПК-11)",
+  "4.3": "Применяет руководящие принципы и четыре измерения к анализу ситуации (ПК-11, ПК-12)",
+  "4.4": "Сравнивает ITIL и ISO/IEC 20000-1, называет требования к СМУ (ПК-11)",
+  "4.5": "Планирует внедрение сервисного подхода в организации (ПК-12, ПК-13)",
+  "5.1": "Составляет каталог услуг и соглашение об уровне услуг (ПК-12)",
+  "5.2": "Классифицирует обращения и назначает приоритет инцидентам (ПК-12)",
+  "5.3": "Проводит анализ первопричин проблемы (ПК-8)",
+  "5.4": "Определяет тип изменения и порядок его утверждения (ПК-12)",
+  "5.5": "Выбирает метрики и оценивает качество услуг по KPI (ПК-8)",
+  "6.1": "Ведёт учёт ИТ-активов и конфигураций на протяжении жизненного цикла (ПК-12)",
+  "6.2": "Выбирает модель облачных услуг и распределяет ответственность с поставщиком (ПК-11)",
+  "6.3": "Описывает процессы жизненного цикла программного обеспечения (ПК-11)",
+  "6.4": "Разрабатывает регламент ИТ-процесса (ПК-12)",
+  "6.5": "Организует жизненный цикл контента и оценивает доступность по WCAG 2.2 (ПК-11, ПК-12)",
+  "7.1": "Различает руководство и управление ИТ, объясняет принципы ISO/IEC 38500 (ПК-15)",
+  "7.2": "Связывает цели организации с целями COBIT 2019 (ПК-11)",
+  "7.3": "Оценивает ИТ-риски и выбирает способы их обработки (ПК-15)",
+  "7.4": "Описывает СУИБ и выбирает меры защиты по ISO/IEC 27001:2022 (ПК-11)",
+  "7.5": "Определяет обязанности по законодательству КР о персональных данных и кибербезопасности (ПК-15, ПК-24)",
+  "8.1": "Составляет бюджет ИТ-службы и рассчитывает совокупную стоимость владения (ПК-6)",
+  "8.2": "Оценивает экономическую эффективность ИТ-проекта по ROI, сроку окупаемости и NPV (ПК-6)",
+  "8.3": "Разрабатывает техническое задание и выбирает метод госзакупки по законодательству КР (ПК-10)",
+  "8.4": "Обосновывает решение об аутсорсинге и организует управление поставщиками (ПК-13)",
+  "8.5": "Формирует малую проектную группу, распределяет роли и выбирает способы мотивации (ПК-16)",
+  "9.1": "Описывает функции управления данными и оценивает качество данных (ПК-4)",
+  "9.2": "Определяет режим доступа к данным и требования к обмену ими в нацэкосистеме (ПК-5)",
+  "9.3": "Объясняет применение ИИ в эксплуатации ИТ и его ограничения (ПК-17)",
+  "9.4": "Оценивает опасность системы ИИ по Цифровому кодексу и описывает систему менеджмента ИИ по ISO/IEC 42001 (ПК-5, ПК-17)",
+  "9.5": "Связывает дорожную карту ИТ-службы с Концепцией цифровой трансформации КР (ПК-4)"
+};
+const TYPES = {single:"Один ответ", multi:"Несколько ответов", match:"Соответствие", order:"Последовательность", hotspot:"Графическое", case:"Кейс"};
+const CHAPTERS = [
+  {n:1, t:"ИТ как объект управления", ready:true},
+  {n:2, t:"Архитектура предприятия", ready:true},
+  {n:3, t:"Обследование и бизнес-процессы", ready:true},
+  {n:4, t:"Сервисный подход и ITIL", ready:true},
+  {n:5, t:"Практики управления услугами", ready:true},
+  {n:6, t:"Жизненный цикл инфраструктуры и контента", ready:true},
+  {n:7, t:"Руководство ИТ и безопасность", ready:true},
+  {n:8, t:"Экономика, закупки и команда", ready:true},
+  {n:9, t:"Данные, ИИ и трансформация", ready:true}
+];
+const UNIS = ["Международный университет им. К.Ш. Токтомаматова", "КГТУ им. И. Раззакова", "ОшТУ им. М. М. Адышева", "Другой вуз"];
+const MODES = {train:"Тренировка", control:"Контроль"};
+const CONF = {1:"Не уверен", 2:"Скорее уверен", 3:"Уверен"};
+const CBM = {1:[1, 0], 2:[2, -2], 3:[3, -6]};
+const IDEAL = {1:"до 67%", 2:"67–80%", 3:"выше 80%"};
+const DEFAULT_PASS = 70;
+const PER_TEST = {};            /* глава → число заданий в варианте; пусто = весь банк */
+const ZONES = {biz:"Бизнес-процессы", svc:"ИТ-услуги", app:"Приложения", data:"Данные и интеграция", plat:"Платформы", net:"Сеть и связь", hw:"Оборудование", fac:"Помещения и энергия", ppl:"Люди и процессы", sec:"Информационная безопасность",
+  pre:"Подготовительная фаза", pa:"A. Видение", pb:"B. Бизнес", pc:"C. Данные и ИС", pd:"D. Технологии", pe:"E. Решения", pf:"F. План миграции", pg:"G. Надзор", ph:"H. Изменения", req:"Управление требованиями",
+  bstart:"Начальное событие «Нужна справка»", bt1:"Задача «Подать заявление»", bt2:"Задача «Найти личное дело»", bgw:"Шлюз «Данные актуальны?»", bt3:"Задача «Набрать справку вручную»", bt4:"Задача «Подписать у декана»", bt5:"Задача «Уточнить данные у студента»", bend:"Конечное событие «Справка получена»", blane1:"Дорожка «Студент»", blane2:"Дорожка «Деканат»",
+  idisc:"Исследование (Discover)", ides:"Проектирование (Design)", iacq:"Приобретение (Acquire)", ibld:"Создание (Build)", itrn:"Переход (Transition)", iopr:"Эксплуатация (Operate)", idlv:"Предоставление (Deliver)", isup:"Поддержка (Support)", ivs:"Система ценности ITIL",
+  puser:"Пользователь", pdesk:"Служба поддержки", preq:"Запрос на обслуживание", pful:"Выполнение запроса", pinc:"Инцидент", pres:"Восстановление услуги", pprob:"Проблема", pke:"Известная ошибка", pchg:"Изменение",
+  cown:"Свой ЦОД", ciaas:"IaaS — инфраструктура как услуга", cpaas:"PaaS — платформа как услуга", csaas:"SaaS — программа как услуга",
+  rctx:"Область, контекст, критерии риска", rid:"Идентификация рисков", ran:"Анализ риска", rev:"Сравнительная оценка риска", rtr:"Обработка риска", rcomm:"Коммуникация и консультирование", rmon:"Мониторинг и пересмотр", rrec:"Запись и отчётность",
+  zneed:"Потребность и обоснование", zplan:"План закупок", ztz:"Техническое задание", zmeth:"Выбор метода закупки", zann:"Объявление на веб-портале", zeval:"Оценка предложений", zcont:"Заключение договора", zacc:"Приёмка", zman:"Управление договором и оценка поставщика",
+  zdes:"Проектирование или плановое изменение", zass:"Оценка опасности", zhigh:"Решение: повышенная опасность?", zgen:"Разумные меры снижения риска", zrisk:"Управление рисками, документация и журналы", zdecl:"Декларация соответствия", zuse:"Применение под контролем человека", zchg:"Незапланированное изменение системы или среды"};
+const FIGZONES = {infra:["biz","svc","app","data","plat","net","hw","fac","ppl","sec"], adm:["pre","pa","pb","pc","pd","pe","pf","pg","ph","req"], bpmn:["bstart","bt1","bt2","bgw","bt3","bt4","bt5","bend","blane1","blane2"], itil:["idisc","ides","iacq","ibld","itrn","iopr","idlv","isup","ivs"], prac:["puser","pdesk","preq","pful","pinc","pres","pprob","pke","pchg"], cloud:["cown","ciaas","cpaas","csaas"], risk:["rctx","rid","ran","rev","rtr","rcomm","rmon","rrec"], proc:["zneed","zplan","ztz","zmeth","zann","zeval","zcont","zacc","zman"], ai:["zdes","zass","zhigh","zgen","zrisk","zdecl","zuse","zchg"]};
+
+const BANK = {1: [
+ {id:"1-01", type:"single", ro:"1.1", bloom:1,
+  q:"ИТ-инфраструктура организации существует прежде всего для того, чтобы:",
+  opts:[["a","размещать и хранить оборудование"],["b","обеспечивать предоставление ИТ-услуг"],["c","снижать затраты организации"],["d","выполнять требования законодательства"]],
+  correct:"b", why:"Инфраструктура не ценна сама по себе: она нужна, чтобы работали ИТ-услуги, через которые сотрудники и клиенты получают результат (раздел 1.1)."},
+ {id:"1-02", type:"hotspot", ro:"1.1", bloom:2, fig:"infra",
+  q:"На схеме ИТ-инфраструктуры нажмите на элемент, который не образует отдельный уровень, а должен действовать на каждом уровне.",
+  correct:"sec", why:"Информационная безопасность — сквозной элемент: меры защиты нужны и в серверной, и в сети, и в приложениях (рис. 1.1)."},
+ {id:"1-03", type:"hotspot", ro:"1.1", bloom:3, fig:"infra",
+  q:"Учётная система бухгалтерии перестала работать: в серверной отключился кондиционер и сервер перегрелся. Нажмите на уровень, где находится первопричина сбоя.",
+  correct:"fac", why:"Первопричина — уровень «Помещения и энергия» (климат-контроль). Сбой поднялся по цепочке зависимостей до ИТ-услуги."},
+ {id:"1-04", type:"order", ro:"1.1", bloom:2,
+  q:"Расположите уровни ИТ-инфраструктуры снизу вверх: от того, на что опираются все остальные, к тому, что получает пользователь.",
+  items:["Помещения и энергия","Оборудование","Платформы","Приложения","ИТ-услуги"],
+  why:"Каждый уровень опирается на нижний: помещения → оборудование → платформы → приложения → услуги (рис. 1.1)."},
+ {id:"1-05", type:"match", ro:"1.2", bloom:2,
+  q:"Установите соответствие между функцией ИТ-службы и примером работы.",
+  items:[["Согласование бюджета ИТ со стратегией организации","Планирование"],["Ввод в действие новой системы документооборота","Создание и внедрение"],["Ежедневное резервное копирование баз данных","Эксплуатация"],["Приём обращения о неработающем принтере","Поддержка пользователей"],["Проверка соблюдения требований к персональным данным","Контроль"]],
+  why:"Пять функций ИТ-службы: планирование, создание и внедрение, эксплуатация, поддержка, контроль (раздел 1.2)."},
+ {id:"1-06", type:"single", ro:"1.2", bloom:3,
+  q:"Банк имеет филиалы в Бишкеке, Оше и Караколе. Головная ИТ-служба задаёт стандарты и отвечает за безопасность, в филиалах работают специалисты поддержки. Это модель:",
+  opts:[["a","централизованная"],["b","децентрализованная"],["c","федеративная (гибридная)"],["d","аутсорсинговая"]],
+  correct:"c", why:"Центр отвечает за стандарты и общую инфраструктуру, на местах — поддержка: это федеративная модель."},
+ {id:"1-07", type:"multi", ro:"1.2", bloom:4,
+  q:"Какие риски характерны для децентрализованной модели ИТ-службы? Выберите все верные ответы.",
+  opts:[["a","Дублирование затрат"],["b","Несовместимые системы в подразделениях"],["c","Слабая информационная безопасность"],["d","Медленная реакция на нужды подразделений"],["e","Зависимость от внешнего поставщика"]],
+  correct:["a","b","c"], why:"Медленная реакция характерна для централизованной модели, зависимость от поставщика — для аутсорсинга."},
+ {id:"1-08", type:"case", ro:"1.2", bloom:5,
+  q:"В айыл өкмөтү работает один сотрудник, который «разбирается в компьютерах». Учреждение переходит на электронные государственные услуги. Какое решение наиболее обоснованно?",
+  opts:[["a","Нанять пятерых ИТ-специалистов, чтобы закрыть все функции"],["b","Смешанная модель: сотрудник отвечает за планирование и контроль, а связь и сопровождение систем закупаются у поставщиков по договору с уровнем услуг"],["c","Отказаться от собственного ИТ-сотрудника и всё передать поставщику"],["d","Ничего не менять: сотрудник справляется с текущими сбоями"]],
+  correct:"b", why:"Маленькой организации не нужен большой штат, но функции планирования и контроля нельзя отдавать полностью. Смешанная модель закрывает все пять функций при разумных затратах."},
+ {id:"1-09", type:"single", ro:"1.3", bloom:1,
+  q:"Гарантия ИТ-услуги характеризует:",
+  opts:[["a","набор функций, нужных потребителю"],["b","доступность, производительность, безопасность и непрерывность"],["c","стоимость услуги"],["d","число пользователей услуги"]],
+  correct:"b", why:"Полезность — что услуга делает; гарантия — насколько надёжно она это делает (раздел 1.3)."},
+ {id:"1-10", type:"match", ro:"1.3", bloom:2,
+  q:"Отнесите каждое утверждение о портале государственных услуг к полезности или к гарантии.",
+  items:[["Через портал можно подать заявление онлайн","Полезность"],["Портал доступен 99,5% времени в месяц","Гарантия"],["Данные заявителей защищены от утечки","Гарантия"],["Справка формируется автоматически","Полезность"]],
+  choices:["Полезность","Гарантия"],
+  why:"Функции (подать заявление, получить справку) — полезность; доступность и защищённость — гарантия."},
+ {id:"1-11", type:"single", ro:"1.3", bloom:4,
+  q:"Новый портал удобен и содержит все нужные функции, но в последние дни месяца, когда все сдают отчётность, он недоступен. Как это оценить?",
+  opts:[["a","Услуга создаёт ценность: функций достаточно"],["b","Нарушена полезность услуги"],["c","Нарушена гарантия, поэтому ценность не создаётся"],["d","Это проблема пользователей, а не услуги"]],
+  correct:"c", why:"Без гарантии полезность не превращается в ценность: в нужный момент услугой нельзя воспользоваться."},
+ {id:"1-12", type:"single", ro:"1.4", bloom:1,
+  q:"Соответствие какому документу может быть подтверждено сертификатом, выданным организации?",
+  opts:[["a","ITIL"],["b","COBIT"],["c","ISO/IEC 20000-1"],["d","PMBOK Guide"]],
+  correct:"c", why:"Стандарты ISO/IEC содержат требования и сертифицируются. ITIL, COBIT и PMBOK — своды практик; по ITIL сертифицируются специалисты, а не организации."},
+ {id:"1-13", type:"match", ro:"1.4", bloom:3,
+  q:"Подберите документ, на который в первую очередь стоит опереться для решения каждой проблемы.",
+  items:[["Пользователи жалуются на долгое устранение сбоев","ITIL"],["Партнёр требует подтвердить защищённость данных","ISO/IEC 27001"],["Руководство не понимает, какую ценность дают расходы на ИТ","COBIT и ISO/IEC 38500"],["Нужно описать текущую и целевую архитектуру организации","TOGAF"],["Нужно однозначно нарисовать бизнес-процесс","BPMN 2.0"]],
+  why:"Документ выбирают под конкретную проблему (раздел 1.4)."},
+ {id:"1-14", type:"multi", ro:"1.4", bloom:2,
+  q:"Какие из документов — стандарты требований ISO/IEC, по которым возможна сертификация организации? Выберите все верные ответы.",
+  opts:[["a","ISO/IEC 20000-1"],["b","ISO/IEC 27001"],["c","ISO/IEC 42001"],["d","ITIL"],["e","TOGAF"],["f","COBIT"]],
+  correct:["a","b","c"], why:"ISO/IEC 20000-1, 27001 и 42001 — системы менеджмента с требованиями. ITIL, TOGAF и COBIT — своды практик."},
+ {id:"1-15", type:"single", ro:"1.5", bloom:1,
+  q:"С введением в действие Цифрового кодекса Кыргызской Республики утратил силу:",
+  opts:[["a","Закон «О кибербезопасности Кыргызской Республики»"],["b","Закон «Об информации персонального характера» 2008 г."],["c","Закон «О государственных и муниципальных услугах»"],["d","Концепция цифровой трансформации на 2024–2028 годы"]],
+  correct:"b", why:"Закон 2008 г. № 58 признан утратившим силу Законом № 179 о введении в действие Цифрового кодекса (раздел 1.5)."},
+ {id:"1-16", type:"case", ro:"1.5", bloom:4,
+  q:"Частный колледж решил перенести учёт студентов в зарубежный облачный сервис. Что ИТ-служба должна сделать до подписания договора?",
+  opts:[["a","Сразу перенести данные: облако надёжнее собственного сервера"],["b","Выяснить, где хранятся данные, определить основание трансграничной передачи и заключить письменный договор с поставщиком как с обработчиком"],["c","Получить лицензию на использование облачных услуг"],["d","Ничего: поставщик зарубежный, кодекс к нему не применяется"]],
+  correct:"b", why:"Цифровой кодекс требует письменного договора с обработчиком (ст. 86) и соблюдения условий трансграничной передачи (ст. 89)."},
+ {id:"1-17", type:"multi", ro:"1.5", bloom:3,
+  q:"Вуз запускает сервис, который автоматически решает, кому назначить стипендию. Какие требования Цифрового кодекса КР нужно учесть? Выберите все верные ответы.",
+  opts:[["a","Провести оценку воздействия до запуска"],["b","Собирать только данные, нужные для цели"],["c","Встроить защиту данных в систему и вести учёт операций"],["d","Зарегистрировать сервис как средство массовой информации"],["e","Опубликовать персональные данные студентов для прозрачности"]],
+  correct:["a","b","c"], why:"Автоматизированные решения с серьёзными последствиями требуют оценки воздействия (ст. 82); минимизация (ст. 78); защита в системе и учёт операций (ст. 88)."},
+ {id:"1-18", type:"single", ro:"1.4", bloom:2,
+  q:"К какому уровню работы с ИТ относятся ISO/IEC 27001 и ISO 22301?",
+  opts:[["a", "Руководство"], ["b", "Архитектура и изменения"], ["c", "Управление услугами"], ["d", "Обеспечивающие системы менеджмента"]],
+  correct:"d", why:"Это стандарты обеспечивающих систем менеджмента: безопасность и непрерывность (раздел 1.4)."},
+ {id:"1-19", type:"single", ro:"1.5", bloom:2,
+  q:"Зачем ИТ-службе реестр нормативных требований?",
+  opts:[["a", "Чтобы заменить им юридический отдел"], ["b", "Чтобы требования законов не терялись: у каждого есть источник, мера, ответственный и срок пересмотра"], ["c", "Чтобы отчитываться перед поставщиками"], ["d", "Он нужен только для сертификации ISO"]],
+  correct:"b", why:"Реестр связывает требование с мерой и ответственным и регулярно пересматривается (раздел 1.5)."},
+ {id:"1-20", type:"single", ro:"1.2", bloom:3,
+  q:"Новый руководитель ИТ-службы вуза в конце первой недели идёт к ректору. Что ему лучше принести?",
+  opts:[["a", "Список оборудования для закупки"], ["b", "Перечень услуг, цепочки зависимостей для важнейших из них, роли и главные риски"], ["c", "Проект новой оргструктуры"], ["d", "Отчёт о количестве компьютеров"]],
+  correct:"b", why:"Разговор с руководством строится вокруг услуг и рисков, а не закупок (разбор ситуации в главе 1)."}
+]};
+
+BANK[2] = [
+ {id:"2-01", type:"single", ro:"2.1", bloom:1,
+  q:"Архитектура предприятия — это:",
+  opts:[["a","схема размещения серверов и сетевого оборудования"],["b","описание процессов, данных, приложений и технологий организации, связей между ними и принципов их развития"],["c","организационная структура с перечнем подразделений"],["d","перечень закупленного программного обеспечения"]],
+  correct:"b", why:"Архитектура предприятия описывает организацию целиком — от целей и процессов до технологий — и правила её развития (раздел 2.1)."},
+ {id:"2-02", type:"multi", ro:"2.1", bloom:2,
+  q:"Какие задачи решает архитектура предприятия? Выберите все верные ответы.",
+  opts:[["a","Связывает ИТ со стратегией организации"],["b","Выявляет дублирование данных и систем"],["c","Делает изменения управляемыми: видно, что затронет новая система"],["d","Заменяет службу поддержки пользователей"],["e","Гарантирует отсутствие сбоев"]],
+  correct:["a","b","c"], why:"Три задачи архитектуры: связь со стратегией, устранение дублирования, управляемость изменений. Поддержку пользователей и надёжность обеспечивают другие практики (главы 4–5)."},
+ {id:"2-03", type:"single", ro:"2.1", bloom:2,
+  q:"Согласно ISO/IEC/IEEE 42010, архитектура описывается:",
+  opts:[["a","одной общей схемой организации"],["b","набором представлений, каждое из которых отвечает на вопросы своей заинтересованной стороны"],["c","только диаграммами на языке ArchiMate"],["d","перечнем серверов и программ"]],
+  correct:"b", why:"Ректору, декану и администратору нужны разные представления одной архитектуры (раздел 2.1)."},
+ {id:"2-04", type:"match", ro:"2.2", bloom:2,
+  q:"Отнесите каждый элемент вуза к домену архитектуры.",
+  items:[["Процесс приёма абитуриентов","Бизнес-архитектура"],["Сущность «студент» и подразделение, отвечающее за её точность","Архитектура данных"],["Система дистанционного обучения и её интеграции","Архитектура приложений"],["Кампусная сеть и серверная","Технологическая архитектура"],["Процесс выдачи дипломов","Бизнес-архитектура"]],
+  choices:["Бизнес-архитектура","Архитектура данных","Архитектура приложений","Технологическая архитектура"],
+  why:"Бизнес — что и зачем делает организация; данные — какие сведения нужны и кто их владелец; приложения — какие системы; технологии — на чём они работают (раздел 2.2)."},
+ {id:"2-05", type:"order", ro:"2.2", bloom:2,
+  q:"Изменение в архитектуре начинается сверху. Расположите домены в том порядке, в котором их прорабатывают.",
+  items:["Бизнес-архитектура","Архитектура данных","Архитектура приложений","Технологическая архитектура"],
+  hint:"Первая строка — домен, с которого начинают.",
+  why:"Сначала меняется процесс, затем под него подбираются данные, приложения и технологии (раздел 2.2)."},
+ {id:"2-06", type:"single", ro:"2.2", bloom:3,
+  q:"В матрице «процессы — приложения» в строке «Аттестация» стоят две отметки «ввод»: в ИС управления вузом и в системе дистанционного обучения. Что это означает?",
+  opts:[["a","Процесс хорошо автоматизирован"],["b","Оценки вводятся дважды: есть дублирование и риск расхождений"],["c","Одна из систем не нужна, её надо удалить"],["d","Процесс не автоматизирован"]],
+  correct:"b", why:"Две отметки «ввод» в одной строке — признак дублирования. Решение — назначить эталонную систему и настроить передачу данных, а не обязательно удалять систему."},
+ {id:"2-07", type:"single", ro:"2.3", bloom:2,
+  q:"Что из перечисленного является языком моделирования архитектуры предприятия?",
+  opts:[["a","TOGAF"],["b","ArchiMate"],["c","Фреймворк Захмана"],["d","ITIL"]],
+  correct:"b", why:"ArchiMate — язык (нотация); TOGAF — стандарт с методом ADM; Захман — схема классификации описаний; ITIL — свод практик управления услугами."},
+ {id:"2-08", type:"match", ro:"2.3", bloom:2,
+  q:"Сопоставьте документ и вопрос, на который он отвечает.",
+  items:[["Фреймворк Захмана","Что описать, чтобы ничего не упустить?"],["TOGAF","Как и в каком порядке разработать архитектуру?"],["ArchiMate","Как однозначно нарисовать архитектуру?"],["BPMN","Как описать отдельный бизнес-процесс?"]],
+  why:"Фреймворки дополняют друг друга: TOGAF задаёт порядок, ArchiMate — язык схем, Захман — проверку полноты, BPMN — процессы (раздел 2.3)."},
+ {id:"2-09", type:"case", ro:"2.3", bloom:4,
+  q:"В колледже работают два ИТ-специалиста. Руководство хочет навести порядок в системах, которые закупались годами без плана. Какой подход разумнее?",
+  opts:[["a","Внедрить TOGAF полностью, со всеми артефактами и репозиторием"],["b","Адаптировать метод: матрица «процессы — приложения», схема потоков данных, 3–5 принципов, схемы в ArchiMate"],["c","Отказаться от архитектуры: малой организации она не нужна"],["d","Нанять архитектора на постоянную ставку"]],
+  correct:"b", why:"TOGAF сам требует адаптации под размер организации; малой организации достаточно нескольких ключевых артефактов (разделы 2.1, 2.4)."},
+ {id:"2-10", type:"hotspot", fig:"adm", ro:"2.4", bloom:1,
+  q:"На схеме цикла ADM нажмите на фазу, в которой составляется дорожная карта со сроками и бюджетом.",
+  correct:"pf", why:"Дорожная карта — результат фазы F «Планирование миграции» (рис. 2.1)."},
+ {id:"2-11", type:"hotspot", fig:"adm", ro:"2.4", bloom:3,
+  q:"Поставщик внедряет портал абитуриента и вместо интеграции с ИС вуза создаёт ещё одну базу абитуриентов. Нажмите на фазу ADM, на которой это должно быть обнаружено.",
+  correct:"pg", why:"Фаза G «Надзор за внедрением» проверяет, соответствует ли реализация архитектуре."},
+ {id:"2-12", type:"order", ro:"2.4", bloom:1,
+  q:"Расположите фазы ADM в порядке выполнения.",
+  items:["A. Видение архитектуры","B. Бизнес-архитектура","C. Архитектура информационных систем","D. Технологическая архитектура","E. Возможности и решения","F. Планирование миграции"],
+  hint:"Первая строка — фаза, с которой начинается цикл.",
+  why:"Цикл идёт от видения через домены B–D к решениям и плану миграции (раздел 2.4)."},
+ {id:"2-13", type:"single", ro:"2.4", bloom:3,
+  q:"Министерство изменило правила приёма в вузы. Какая фаза ADM отвечает за то, чтобы решить, нужен ли новый цикл разработки архитектуры?",
+  opts:[["a","A. Видение архитектуры"],["b","E. Возможности и решения"],["c","G. Надзор за внедрением"],["d","H. Управление изменениями"]],
+  correct:"d", why:"Фаза H отслеживает изменения во внешней среде и решает, запускать ли новый цикл ADM."},
+ {id:"2-14", type:"single", ro:"2.5", bloom:2,
+  q:"Разрыв в архитектуре — это:",
+  opts:[["a","сбой в работе информационной системы"],["b","разница между текущей и целевой архитектурой"],["c","отсутствие связи с провайдером"],["d","расхождение бюджета с фактическими затратами"]],
+  correct:"b", why:"Разрывы выявляются сравнением as-is и to-be; список действий по их устранению — дорожная карта (раздел 2.5)."},
+ {id:"2-15", type:"case", ro:"2.5", bloom:4,
+  q:"Данные абитуриента вводятся вручную в две системы, и они расходятся. Какое действие закрывает этот разрыв в домене данных?",
+  opts:[["a","Купить более мощный сервер"],["b","Назначить владельца данных и эталонную систему, настроить передачу данных в другую систему"],["c","Обучить операторов вводить данные быстрее"],["d","Вернуться к бумажному учёту"]],
+  correct:"b", why:"Разрыв в домене данных — отсутствие единого источника и владельца. Технические меры его не закрывают."},
+ {id:"2-16", type:"case", ro:"2.5", bloom:5,
+  q:"Предложена дорожная карта: 1) запустить портал абитуриента; 2) утвердить регламент электронного приёма и назначить владельца данных; 3) обеспечить резерв мощности серверов. Оцените её.",
+  opts:[["a","Порядок верный: сначала результат, видимый абитуриентам"],["b","Порядок неверный: регламент, владелец данных и инфраструктура должны предшествовать порталу, иначе он заработает без правил и может не выдержать пик приёмной кампании"],["c","Порядок не важен, если все шаги выполнены к началу приёма"],["d","Инфраструктура вообще не входит в дорожную карту архитектуры"]],
+  correct:"b", why:"Дорожная карта строится по зависимостям: сначала то, без чего нельзя начать остальное; каждое переходное состояние должно быть работоспособным (раздел 2.5)."},
+ {id:"2-17", type:"multi", ro:"2.5", bloom:3,
+  q:"Какие формулировки являются архитектурными принципами, а не пожеланиями? Выберите все верные ответы.",
+  opts:[["a","Данные вводятся один раз в систему-источник"],["b","Новая система должна иметь открытые интерфейсы (API)"],["c","ИТ должны быть эффективными"],["d","У каждого набора данных один владелец"],["e","Используем современные технологии"]],
+  correct:["a","b","d"], why:"С принципом можно не согласиться и по нему можно проверить решение. «ИТ должны быть эффективными» и «современные технологии» проверить нельзя (раздел 2.6)."},
+ {id:"2-18", type:"single", ro:"2.2", bloom:2,
+  q:"Чем бизнес-возможность отличается от процесса?",
+  opts:[["a", "Ничем, это синонимы"], ["b", "Возможность описывает, ЧТО организация способна делать, и меняется реже, чем процессы"], ["c", "Возможность — это подразделение"], ["d", "Возможность описывает ИТ-систему"]],
+  correct:"b", why:"Процессы описывают, КАК работает организация; возможности устойчивы к реорганизациям (раздел 2.2)."},
+ {id:"2-19", type:"single", ro:"2.3", bloom:2,
+  q:"Каким элементом ArchiMate изобразить портал абитуриента?",
+  opts:[["a", "Бизнес-роль"], ["b", "Компонент приложения"], ["c", "Технологический узел"], ["d", "Бизнес-событие"]],
+  correct:"b", why:"Портал — прикладная система, в ArchiMate это компонент приложения (раздел 2.3)."},
+ {id:"2-20", type:"single", ro:"2.5", bloom:3,
+  q:"Разрывов больше, чем средств. Как определить порядок шагов?",
+  opts:[["a", "По тому, какое подразделение просит громче"], ["b", "Оценить разрывы по нескольким критериям (влияние, срочность, затраты, зависимость) и утвердить порядок на архитектурном совете или ИТ-комитете"], ["c", "Устранять все одновременно"], ["d", "Начинать с самых дешёвых"]],
+  correct:"b", why:"Приоритизация по критериям защищает от решений «по громкости» (раздел 2.5)."}
+];
+
+BANK[3] = [
+ {id:"3-01", type:"single", ro:"3.1", bloom:1,
+  q:"С чего начинается обследование ИТ-инфраструктуры?",
+  opts:[["a","С установки программ мониторинга"],["b","С определения цели и границ обследования"],["c","С закупки нового оборудования"],["d","С написания отчёта"]],
+  correct:"b", why:"Цель определяет глубину и состав работ: обследование перед переходом в облако и перед сертификацией — разные работы (раздел 3.1)."},
+ {id:"3-02", type:"order", ro:"3.1", bloom:1,
+  q:"Расположите этапы обследования по порядку.",
+  items:["Подготовка","Сбор данных","Анализ","Рекомендации и отчёт"], hint:"Первая строка — первый этап.",
+  why:"Подготовка → сбор данных → анализ → рекомендации и отчёт (раздел 3.1)."},
+ {id:"3-03", type:"case", ro:"3.1", bloom:3,
+  q:"Руководитель ИТ-службы говорит, что резервное копирование делается ежедневно. Как подтвердить это по правилу триангуляции?",
+  opts:[["a","Достаточно его слов: он отвечает за ИТ"],["b","Проверить журнал системы резервного копирования и акт тестового восстановления"],["c","Спросить ещё одного сотрудника ИТ-службы"],["d","Попросить письменное подтверждение от руководителя"]],
+  correct:"b", why:"Вывод должен подтверждаться двумя источниками разного типа: слова + данные системы и документ. Мнение второго сотрудника — источник того же типа."},
+ {id:"3-04", type:"multi", ro:"3.2", bloom:2,
+  q:"Какие поля реестра активов нужны, чтобы построить карту зависимостей и оценить риски? Выберите все верные ответы.",
+  opts:[["a","Владелец актива"],["b","Критичность"],["c","Связанные услуги"],["d","Срок поддержки версии"],["e","Цвет корпуса оборудования"],["f","Имя сотрудника, который распаковал оборудование"]],
+  correct:["a","b","c","d"], why:"Владелец, критичность, связанные услуги и срок поддержки нужны для управления; остальное к управлению не относится (раздел 3.2)."},
+ {id:"3-05", type:"single", ro:"3.2", bloom:3,
+  q:"Что из перечисленного — единичная точка отказа?",
+  opts:[["a","Два сервера, работающие с резервированием"],["b","Единственный сотрудник, который знает пароли и устройство ИС вуза"],["c","Облачная почта с договором об уровне услуг"],["d","Резервная копия базы данных в другом здании"]],
+  correct:"b", why:"Единичная точка отказа — актив без резерва, от которого зависят критичные услуги. Часто это не техника, а человек (раздел 3.2)."},
+ {id:"3-06", type:"case", ro:"3.2", bloom:4,
+  q:"По карте зависимостей услуги «Учёт успеваемости» и «Личный кабинет студента» работают на одном физическом сервере без резерва; сайт вуза размещён у хостинг-провайдера. Что приоритетно рекомендовать?",
+  opts:[["a","Перенести сайт на собственный сервер"],["b","Обеспечить резервирование общего сервера: это единичная точка отказа для двух критичных услуг"],["c","Купить новые рабочие места"],["d","Ничего: сбоев пока не было"]],
+  correct:"b", why:"Приоритет — актив, от которого зависят несколько критичных услуг и у которого нет резерва."},
+ {id:"3-07", type:"match", ro:"3.3", bloom:1,
+  q:"Сопоставьте уровень возможностей процесса (COBIT 2019) и его признак.",
+  items:[["Уровень 1 — Начальный","Работа делается, но непредсказуемо"],["Уровень 2 — Управляемый","Запланирован и отслеживается в одном подразделении"],["Уровень 3 — Определённый","Единый стандарт для всей организации"],["Уровень 4 — Количественно управляемый","Измеряется и контролируется по метрикам"],["Уровень 5 — Оптимизирующий","Непрерывно совершенствуется по данным измерений"]],
+  why:"Шкала COBIT 2019 основана на CMMI (раздел 3.3)."},
+ {id:"3-08", type:"single", ro:"3.3", bloom:3,
+  q:"В вузе работает единая служба поддержки, есть регламент и приоритеты для всех корпусов, но время решения обращений не измеряется. Какой это уровень возможностей?",
+  opts:[["a","1 — Начальный"],["b","2 — Управляемый"],["c","3 — Определённый"],["d","4 — Количественно управляемый"]],
+  correct:"c", why:"Единый стандарт для всей организации — уровень 3; для уровня 4 нужны метрики."},
+ {id:"3-09", type:"case", ro:"3.3", bloom:5,
+  q:"Руководство колледжа ставит задачу за год довести все ИТ-процессы до уровня 5. Оцените эту цель.",
+  opts:[["a","Цель правильная: чем выше уровень, тем лучше"],["b","Цель нецелесообразна: целевой уровень выбирают по важности процесса, для малой организации обычно достаточно 2–3, а уровни нельзя перескочить"],["c","Цель достижима, если купить систему мониторинга"],["d","Цель правильная, но срок нужно сократить до полугода"]],
+  correct:"b", why:"Целевой уровень зависит от важности процесса; измерять процесс бессмысленно, пока он не стал единым (раздел 3.3)."},
+ {id:"3-10", type:"hotspot", fig:"bpmn", ro:"3.4", bloom:1,
+  q:"На BPMN-схеме нажмите на шлюз — элемент, в котором поток разветвляется.",
+  correct:"bgw", why:"Шлюз обозначается ромбом; у его выходов подписаны условия (раздел 3.4)."},
+ {id:"3-11", type:"match", ro:"3.4", bloom:2,
+  q:"Сопоставьте элемент BPMN и его обозначение.",
+  items:[["Событие","Круг"],["Задача","Прямоугольник со скруглёнными углами"],["Шлюз","Ромб"],["Дорожка","Горизонтальная полоса"],["Поток управления","Сплошная стрелка"]],
+  why:"Пять групп элементов BPMN, достаточных для обследования (раздел 3.4)."},
+ {id:"3-12", type:"single", ro:"3.4", bloom:2,
+  q:"Какое название задачи соответствует правилам хорошей BPMN-модели?",
+  opts:[["a","Проверка"],["b","Деканат"],["c","Проверить данные заявления"],["d","Данные"]],
+  correct:"c", why:"Задача называется глаголом и существительным: что делается и с чем."},
+ {id:"3-13", type:"hotspot", fig:"bpmn", ro:"3.4", bloom:3,
+  q:"Нажмите на элемент схемы, который показывает исполнителя, проверяющего данные.",
+  correct:"blane2", why:"Исполнитель задаётся дорожкой: задача «Найти личное дело» и шлюз проверки находятся в дорожке «Деканат»."},
+ {id:"3-14", type:"hotspot", fig:"bpmn", ro:"3.5", bloom:3,
+  q:"Нажмите на задачу, в которой происходит повторный ввод данных, уже имеющихся в ИС вуза.",
+  correct:"bt3", why:"«Набрать справку вручную» — повторный ввод данных (раздел 3.5)."},
+ {id:"3-15", type:"multi", ro:"3.5", bloom:2,
+  q:"Что из перечисленного является потерями в процессе выдачи справки? Выберите все верные ответы.",
+  opts:[["a","Ожидание подписи декана"],["b","Ручной набор данных, которые есть в ИС"],["c","Возврат заявления на уточнение"],["d","Получение студентом справки"],["e","Подача студентом запроса"]],
+  correct:["a","b","c"], why:"Потери не добавляют ценности потребителю. Запрос и получение справки — начало и результат процесса."},
+ {id:"3-16", type:"single", ro:"3.5", bloom:4,
+  q:"Какое из решений является реинжинирингом процесса выдачи справки, а не оптимизацией?",
+  opts:[["a","Шаблон справки в текстовом редакторе вместо набора с нуля"],["b","Отдельный стол для приёма заявлений"],["c","Студент заказывает справку в личном кабинете, она формируется из ИС вуза и подписывается электронной подписью"],["d","Дополнительный сотрудник в деканате"]],
+  correct:"c", why:"Реинжиниринг ставит вопрос «зачем набирать справку вообще» и меняет процесс целиком (раздел 3.5)."},
+ {id:"3-17", type:"case", ro:"3.5", bloom:5,
+  q:"В отчёте об обследовании есть рекомендация «Внедрить новую систему электронного документооборота», но в разделе проблем о документообороте ничего не сказано. Оцените рекомендацию.",
+  opts:[["a","Рекомендация хорошая: документооборот нужен всем"],["b","Цепочка «доказательство → проблема → рекомендация» разорвана; нужно описать проблему с доказательствами или убрать рекомендацию"],["c","Рекомендацию нужно перенести в начало отчёта"],["d","Достаточно указать стоимость системы"]],
+  correct:"b", why:"Рекомендация без проблемы и доказательства воспринимается как мнение автора и редко выполняется (раздел 3.6)."},
+ {id:"3-18", type:"single", ro:"3.4", bloom:2,
+  q:"Что фиксирует таблица SIPOC?",
+  opts:[["a", "Только участников процесса"], ["b", "Границы процесса: поставщиков, входы, шаги, выходы и потребителей"], ["c", "Время выполнения шагов"], ["d", "Уровень зрелости процесса"]],
+  correct:"b", why:"SIPOC заполняют до схемы, чтобы модель не «расползалась» (раздел 3.4)."},
+ {id:"3-19", type:"single", ro:"3.5", bloom:3,
+  q:"Время цикла выдачи справки — 16,5 рабочего часа, работа — 0,5 ч. Какова эффективность процесса?",
+  opts:[["a", "≈ 3 %"], ["b", "≈ 30 %"], ["c", "≈ 50 %"], ["d", "≈ 97 %"]],
+  correct:"a", why:"0,5 / 16,5 × 100 % ≈ 3 %. Основные потери — ожидание (раздел 3.5)."},
+ {id:"3-20", type:"single", ro:"3.5", bloom:3,
+  q:"Какие улучшения по матрице «эффект — усилия» внедряют первыми?",
+  opts:[["a", "Большой эффект, большие усилия"], ["b", "Малый эффект, малые усилия"], ["c", "Большой эффект, малые усилия"], ["d", "Малый эффект, большие усилия"]],
+  correct:"c", why:"«Быстрые победы» дают результат и доверие к проекту (раздел 3.5)."}
+];
+
+BANK[4] = [
+ {id:"4-01", type:"match", ro:"4.1", bloom:1,
+  q:"Сопоставьте роль потребителя услуги и её описание.",
+  items:[["Заказчик","Определяет требования к услуге и отвечает за результат её использования"],["Пользователь","Непосредственно пользуется услугой"],["Спонсор","Утверждает бюджет на потребление услуги"]],
+  why:"Три роли потребителя могут совпадать в одном лице или быть разделены между разными людьми (раздел 4.1)."},
+ {id:"4-02", type:"single", ro:"4.1", bloom:2,
+  q:"Абитуриент подал заявление через портал и поступил в вуз, не приезжая в город. Что здесь является исходом (outcome), а не результатом (output)?",
+  opts:[["a","Сформированная в системе запись о заявлении"],["b","Электронное письмо с подтверждением приёма"],["c","Абитуриент поступил без поездки и затрат на дорогу"],["d","Отчёт приёмной комиссии о числе заявлений"]],
+  correct:"c", why:"Результат — то, что производит деятельность (запись, письмо). Исход — то, чего достигает потребитель благодаря результатам (раздел 4.1)."},
+ {id:"4-03", type:"multi", ro:"4.1", bloom:3,
+  q:"Какие характеристики услуги «Электронная зачётная книжка» относятся к гарантии, а не к полезности? Выберите все верные ответы.",
+  opts:[["a","Доступна 99% времени в период сессии"],["b","Показывает оценки по всем дисциплинам"],["c","Данные защищены от несанкционированного изменения"],["d","Выдерживает одновременный вход всех студентов"],["e","Позволяет скачать выписку оценок"]],
+  correct:["a","c","d"], why:"Полезность — что услуга делает (функции). Гарантия — как хорошо она это делает: доступность, мощность, безопасность, непрерывность."},
+ {id:"4-04", type:"hotspot", fig:"itil", ro:"4.2", bloom:1,
+  q:"На схеме жизненного цикла ITIL (Version 5) нажмите на активность, в которой выявляют потребности и возможности.",
+  correct:"idisc", why:"Исследование (Discover) отвечает на вопрос «какие потребности и возможности есть?» и открывает цикл (раздел 4.2, рис. 4.1)."},
+ {id:"4-05", type:"order", ro:"4.2", bloom:1,
+  q:"Расположите активности жизненного цикла ITIL (Version 5) в порядке, показанном на рис. 4.1, начиная с «Исследования».",
+  items:["Исследование","Проектирование","Приобретение","Создание","Переход","Эксплуатация","Предоставление","Поддержка"], hint:"Первая строка — первая активность.",
+  why:"Discover → Design → Acquire → Build → Transition → Operate → Deliver → Support. Цикл итеративный: опыт поддержки становится началом нового исследования."},
+ {id:"4-06", type:"hotspot", fig:"itil", ro:"4.2", bloom:2,
+  q:"Вуз решил не разрабатывать модуль приёма самостоятельно, а купить готовый у поставщика. Нажмите на активность жизненного цикла, к которой относится это решение.",
+  correct:"iacq", why:"Приобретение (Acquire) отвечает на вопрос «что взять у поставщиков?». Собственная разработка относилась бы к созданию (Build)."},
+ {id:"4-07", type:"single", ro:"4.2", bloom:2,
+  q:"Чем модель жизненного цикла ITIL (Version 5) отличается от цепочки ценности ITIL 4?",
+  opts:[["a","В ней меньше активностей, чем в цепочке ценности"],["b","Активности проектирования и перехода разделены, эксплуатация, предоставление и поддержка выделены отдельно, всего их восемь"],["c","Она описывает только разработку программ"],["d","Она заменила руководящие принципы"]],
+  correct:"b", why:"Восемь активностей вместо шести; цепочка ценности стала частью модели жизненного цикла, принципы не изменились (раздел 4.2)."},
+ {id:"4-08", type:"match", ro:"4.3", bloom:2,
+  q:"Сопоставьте ситуацию и руководящий принцип, который она нарушает.",
+  items:[["Вуз купил новую систему, не изучив, что уже работает","Начинайте с того, где вы есть"],["Запустили портал сразу на все направления без пробного этапа","Продвигайтесь итеративно, с обратной связью"],["Автоматизировали процесс с лишними согласованиями","Оптимизируйте и автоматизируйте"],["Изменили форму заявления, не учтя отчёты и интеграции","Мыслите и работайте целостно"]],
+  why:"Каждый принцип — вопрос, который стоит задать перед решением (раздел 4.3)."},
+ {id:"4-09", type:"case", ro:"4.3", bloom:4,
+  q:"Портал приёма работает без сбоев, но абитуриенты жалуются, что на их вопросы никто не отвечает. К какому измерению относится главная причина?",
+  opts:[["a","Информация и технологии"],["b","Организации и люди: не назначены ответственные и нет службы поддержки"],["c","Партнёры и поставщики"],["d","Проблема не связана с измерениями"]],
+  correct:"b", why:"Техника работает, но не определены роли и ответственность за поддержку — это измерение «организации и люди» (раздел 4.3)."},
+ {id:"4-10", type:"multi", ro:"4.3", bloom:2,
+  q:"Какие из перечисленных являются четырьмя измерениями управления продуктами и услугами? Выберите все верные ответы.",
+  opts:[["a","Организации и люди"],["b","Информация и технологии"],["c","Партнёры и поставщики"],["d","Потоки создания ценности и процессы"],["e","Финансы и бюджет"],["f","Законодательство"]],
+  correct:["a","b","c","d"], why:"Финансы и законодательство учитываются как внешние факторы, но измерениями не являются (раздел 4.3)."},
+ {id:"4-11", type:"single", ro:"4.4", bloom:1,
+  q:"Что сертифицируется на соответствие ISO/IEC 20000-1?",
+  opts:[["a","Знания отдельного специалиста"],["b","Система менеджмента услуг организации"],["c","Программный продукт для службы поддержки"],["d","Учебный курс по ITIL"]],
+  correct:"b", why:"ISO/IEC 20000-1 задаёт требования к СМУ организации; знания специалистов подтверждают сертификаты ITIL (раздел 4.5)."},
+ {id:"4-12", type:"match", ro:"4.4", bloom:2,
+  q:"Сопоставьте подраздел 8 ISO/IEC 20000-1 и его содержание.",
+  items:[["8.2 Портфель услуг","Каталог услуг, управление активами и конфигурацией"],["8.3 Отношения и соглашения","Уровни услуг, работа с заказчиками и поставщиками"],["8.5 Проектирование, построение и переход","Изменения, релизы и развёртывание"],["8.6 Разрешение и исполнение","Инциденты, запросы на обслуживание, проблемы"],["8.7 Обеспечение услуг","Доступность, непрерывность, информационная безопасность"]],
+  why:"Раздел 8 «Деятельность» содержит основные требования к работе с услугами (раздел 4.5)."},
+ {id:"4-13", type:"case", ro:"4.4", bloom:4,
+  q:"Руководитель ИТ-службы говорит: «Мы внедрили ITIL, значит, соответствуем ISO/IEC 20000-1». Оцените утверждение.",
+  opts:[["a","Верно: ITIL и ISO/IEC 20000-1 — одно и то же"],["b","Неверно: ITIL даёт рекомендации, а соответствие стандарту нужно доказать выполнением его требований при аудите"],["c","Верно, если сотрудники получили сертификаты ITIL"],["d","Неверно: ITIL противоречит ISO/IEC 20000-1"]],
+  correct:"b", why:"Практики ITIL помогают выполнить требования стандарта, но соответствие подтверждается документами и записями на аудите (раздел 4.5)."},
+ {id:"4-14", type:"order", ro:"4.5", bloom:3,
+  q:"Расположите этапы внедрения сервисного подхода в правильном порядке.",
+  items:["Оценка текущего состояния","Каталог услуг","Единая точка контакта","Соглашения и измерения","Постоянное улучшение"], hint:"Первая строка — первый этап.",
+  why:"Без оценки нельзя составить каталог; соглашения бессмысленны, пока обращения не учитываются (раздел 4.6)."},
+ {id:"4-15", type:"single", ro:"4.5", bloom:3,
+  q:"Какое название больше подходит для услуги в каталоге ИТ-службы вуза?",
+  opts:[["a","Сервер 1С"],["b","Начисление стипендии"],["c","Кластер виртуализации"],["d","Сетевой коммутатор корпуса Б"]],
+  correct:"b", why:"Услуга называется тем, что получает пользователь. Сервер и коммутатор — компоненты, на которых она держится (раздел 4.6)."},
+ {id:"4-16", type:"multi", ro:"4.5", bloom:4,
+  q:"Какие из решений являются типичными ошибками внедрения? Выберите все верные ответы.",
+  opts:[["a","Купить ИТСМ-систему до описания услуг и процессов"],["b","Ввести соглашения об уровне услуг без возможности измерять показатели"],["c","Начать с обследования текущего состояния"],["d","Внедрить сразу все 34 практики"],["e","Назначить владельца для каждой услуги"]],
+  correct:["a","b","d"], why:"Обследование и назначение владельцев — правильные шаги; остальное ведёт к формальному внедрению без результата (раздел 4.6)."},
+ {id:"4-17", type:"case", ro:"4.5", bloom:5,
+  q:"ИТ-отдел районной администрации предлагает начать внедрение с подписания соглашений об уровне услуг со всеми отделами. Обращения сейчас принимаются по телефону разным сотрудникам и не регистрируются. Оцените план.",
+  opts:[["a","План хороший: соглашения сразу повысят качество"],["b","План преждевременный: без регистрации обращений нельзя измерить выполнение соглашений; сначала нужны каталог услуг и единая точка контакта"],["c","План хороший, если соглашения будут на 99,9% доступности"],["d","Соглашения не нужны государственным органам"]],
+  correct:"b", why:"Соглашение, выполнение которого нельзя измерить, остаётся декларацией. Сначала — каталог и учёт обращений (раздел 4.6)."},
+ {id:"4-18", type:"single", ro:"4.2", bloom:2,
+  q:"Что такое поток создания ценности?",
+  opts:[["a", "Отчёт о прибыли ИТ-службы"], ["b", "Последовательность активностей, которая превращает конкретный запрос в ценность"], ["c", "Список практик ITIL"], ["d", "Денежный поток проекта"]],
+  correct:"b", why:"Потоки собираются из активностей жизненного цикла для типовых сценариев (раздел 4.2)."},
+ {id:"4-19", type:"single", ro:"4.3", bloom:2,
+  q:"Принятие Цифрового кодекса КР — это какой фактор по схеме PESTLE?",
+  opts:[["a", "Экономический"], ["b", "Социальный"], ["c", "Правовой"], ["d", "Экологический"]],
+  correct:"c", why:"Законодательство относится к правовым (Legal) факторам (раздел 4.3, рис. 4.2)."},
+ {id:"4-20", type:"single", ro:"4.4", bloom:2,
+  q:"Что аудитор считает доказательством при сертификации по ISO/IEC 20000-1?",
+  opts:[["a", "Устное заверение руководителя"], ["b", "Записи: утверждённую политику, каталог, отчёты по SLA, записи об инцидентах и изменениях, протоколы анализа"], ["c", "Наличие лицензии на ITSM-систему"], ["d", "Количество сотрудников ИТ-службы"]],
+  correct:"b", why:"Аудит опирается на записи, подтверждающие выполнение требований (раздел 4.5)."}
+];
+
+BANK[5] = [
+ {id:"5-01", type:"match", ro:"5.1", bloom:1,
+  q:"Сопоставьте документ и его содержание.",
+  items:[["Каталог услуг","Перечень услуг с описанием на языке пользователя"],["SLA","Цели по уровню услуги, согласованные с заказчиком"],["OLA","Договорённость ИТ-службы с её внутренним подразделением"],["Договор с поставщиком (UC)","Обязательства внешней организации перед ИТ-службой"]],
+  why:"SLA опирается на OLA и договоры с поставщиками; каталог описывает, что вообще предлагается (раздел 5.1)."},
+ {id:"5-02", type:"single", ro:"5.1", bloom:2,
+  q:"Какая информация относится к техническому каталогу услуг, а не к каталогу для пользователей?",
+  opts:[["a","Как сообщить о сбое"],["b","Сервер базы данных и сеть, от которых зависит услуга"],["c","Время работы услуги"],["d","Ценность услуги для студента"]],
+  correct:"b", why:"Технический каталог показывает компоненты и зависимости — это карта зависимостей из раздела 3.2."},
+ {id:"5-03", type:"case", ro:"5.1", bloom:4,
+  q:"ИТ-служба хочет записать в SLA восстановление сайта вуза за 4 часа. Сайт размещён у хостинг-провайдера, договор с которым допускает устранение аварии за 24 часа. Оцените ситуацию.",
+  opts:[["a","Всё в порядке: SLA и договор с провайдером не связаны"],["b","SLA невыполним: нужно изменить договор с провайдером или цель SLA до подписания"],["c","Нужно записать в SLA 2 часа, чтобы был запас"],["d","Достаточно OLA с сетевыми администраторами"]],
+  correct:"b", why:"Цели SLA проверяют по OLA и договорам с поставщиками до подписания (раздел 5.1)."},
+ {id:"5-04", type:"multi", ro:"5.1", bloom:3,
+  q:"Какие свойства делают цель SLA проверяемой? Выберите все верные ответы.",
+  opts:[["a","Указано, как и где измеряется показатель"],["b","Указано, какие периоды исключаются (плановые работы)"],["c","Сформулирована понятно для пользователя"],["d","Установлено максимально высокое значение"],["e","Описана техническими терминами компонентов"]],
+  correct:["a","b","c"], why:"«99,9 %» без способа измерения и исключений проверить нельзя. Слишком высокая цель может быть недостижимой."},
+ {id:"5-05", type:"hotspot", fig:"prac", ro:"5.2", bloom:1,
+  q:"На схеме нажмите на элемент, который является единой точкой контакта пользователя с ИТ-службой.",
+  correct:"pdesk", why:"Служба поддержки принимает все обращения и регистрирует их (раздел 5.2)."},
+ {id:"5-06", type:"match", ro:"5.2", bloom:2,
+  q:"Сопоставьте обращение и его тип.",
+  items:[["Студенты не могут войти в личный кабинет","Инцидент"],["Создать учётную запись новому преподавателю","Запрос на обслуживание"],["Как скачать выписку оценок?","Консультация"],["Добавьте уведомления о новых оценках","Предложение"]],
+  why:"Инцидент — прерывание или ухудшение услуги; запрос — заранее определённое действие (раздел 5.2)."},
+ {id:"5-07", type:"single", ro:"5.2", bloom:3,
+  q:"В разгар приёмной кампании портал подачи заявлений недоступен для всех абитуриентов. Какой приоритет по матрице из раздела 5.3?",
+  opts:[["a","1 — критический"],["b","2 — высокий"],["c","3 — средний"],["d","5 — планируемый"]],
+  correct:"a", why:"Влияние высокое (все абитуриенты, критичная услуга), срочность высокая (идёт кампания) — приоритет 1."},
+ {id:"5-08", type:"single", ro:"5.2", bloom:2,
+  q:"Инцидент может нарушить срок по SLA, и об этом сообщают руководителю ИТ-службы. Как называется такая эскалация?",
+  opts:[["a","Функциональная"],["b","Иерархическая"],["c","Техническая"],["d","Плановая"]],
+  correct:"b", why:"Иерархическая эскалация — информирование руководства; функциональная — передача специалистам другой линии (раздел 5.3)."},
+ {id:"5-09", type:"hotspot", fig:"prac", ro:"5.3", bloom:2,
+  q:"Нажмите на элемент схемы, который появляется, когда причина проблемы установлена.",
+  correct:"pke", why:"Проблема с установленной причиной называется известной ошибкой; для неё записывают обходное решение (раздел 5.4)."},
+ {id:"5-10", type:"order", ro:"5.3", bloom:3,
+  q:"Расположите шаги анализа «пять почему» для сбоя личного кабинета от симптома к первопричине.",
+  items:["Личный кабинет недоступен","Остановилась база данных","Переполнился диск сервера","Резервные копии не удаляются","Нет регламента резервного копирования"], hint:"Первая строка — симптом.",
+  why:"Цепочка ведёт от технического симптома к организационной причине (раздел 5.4)."},
+ {id:"5-11", type:"case", ro:"5.3", bloom:4,
+  q:"После очистки диска личный кабинет снова работает. Руководитель предлагает закрыть проблему. Оцените решение.",
+  opts:[["a","Верно: услуга восстановлена"],["b","Неверно: очистка — обходное решение; проблему закрывают после устранения первопричины или осознанного решения жить с ней"],["c","Верно, если очистку делать каждый день"],["d","Неверно: нужно найти виновного сотрудника"]],
+  correct:"b", why:"Инцидент закрывают при восстановлении услуги, проблему — при устранении причины (раздел 5.4)."},
+ {id:"5-12", type:"match", ro:"5.4", bloom:2,
+  q:"Сопоставьте изменение и его тип.",
+  items:[["Создание почтового ящика новому сотруднику по шаблону","Стандартное"],["Переход на новую версию ИС вуза","Обычное"],["Смена пароля администратора после утечки","Экстренное"]],
+  why:"Тип зависит от риска и срочности: стандартное разрешено заранее, экстренное — ускоренно (раздел 5.5)."},
+ {id:"5-13", type:"single", ro:"5.4", bloom:2,
+  q:"Что, помимо плана выполнения, должно быть у обычного изменения, чтобы можно было быстро вернуть услугу при неудаче?",
+  opts:[["a","План отката"],["b","Подпись ректора"],["c","Новая версия SLA"],["d","Отчёт о KPI"]],
+  correct:"a", why:"План отката описывает, как вернуть прежнее состояние (раздел 5.5)."},
+ {id:"5-14", type:"case", ro:"5.4", bloom:4,
+  q:"Обновление ИС вуза запланировали на первый день экзаменационной сессии, потому что в этот день свободен подрядчик. Оцените план.",
+  opts:[["a","Хороший план: подрядчик свободен"],["b","План рискованный: сессия — период запрета изменений критичных услуг; обновление нужно перенести"],["c","Хороший план, если обновление ночью"],["d","План хороший, если оформить его как экстренное изменение"]],
+  correct:"b", why:"Периоды запрета изменений отмечают в календаре; экстренный порядок не для плановых работ (раздел 5.5)."},
+ {id:"5-15", type:"single", ro:"5.5", bloom:3,
+  q:"Услуга должна работать круглосуточно, в месяце 720 ч. Простой составил 6 ч. Какова доступность?",
+  opts:[["a","≈ 99,17 %"],["b","≈ 99,50 %"],["c","≈ 99,92 %"],["d","≈ 98,33 %"]],
+  correct:"a", why:"(720 − 6) / 720 × 100 ≈ 99,17 % (раздел 5.6)."},
+ {id:"5-16", type:"multi", ro:"5.5", bloom:4,
+  q:"Все показатели SLA «зелёные», но студенты недовольны личным кабинетом. Что поможет увидеть реальную картину? Выберите все верные ответы.",
+  opts:[["a","Короткий опрос пользователей после закрытия обращения"],["b","Доля повторно открытых инцидентов"],["c","Измерение доступности со стороны пользователя, а не только серверов"],["d","Увеличить число KPI до пятидесяти"],["e","Отменить опросы, чтобы не портить статистику"]],
+  correct:["a","b","c"], why:"«Эффект арбуза» устраняют, добавляя показатели результата для пользователя (раздел 5.6)."},
+ {id:"5-17", type:"case", ro:"5.5", bloom:5,
+  q:"Руководство решило премировать первую линию только за скорость закрытия инцидентов. Оцените решение.",
+  opts:[["a","Хорошее решение: скорость — главный показатель"],["b","Рискованное: инциденты начнут закрывать, не решив; нужен уравновешивающий показатель — доля повторно открытых и удовлетворённость"],["c","Хорошее, если добавить штрафы за опоздание"],["d","Решение не влияет на качество поддержки"]],
+  correct:"b", why:"Показатель, ставший целью, искажает поведение; KPI берут парами (раздел 5.6)."},
+ {id:"5-18", type:"single", ro:"5.2", bloom:2,
+  q:"Что отличает процедуру крупного инцидента?",
+  opts:[["a", "Её придумывают в момент сбоя"], ["b", "Она подготовлена заранее: назначается координатор, собираются специалисты и поставщики, пользователи и руководство регулярно информируются, после восстановления проводится разбор"], ["c", "Её выполняет только поставщик"], ["d", "Она не требует записи об инциденте"]],
+  correct:"b", why:"Процедура готовится заранее, чтобы в момент сбоя не решать, кто что делает (раздел 5.3)."},
+ {id:"5-19", type:"single", ro:"5.3", bloom:3,
+  q:"За месяц 60 % обращений пришлись на две причины. Какой метод подсказывает начать с них?",
+  opts:[["a", "Анализ Парето"], ["b", "Матрица RACI"], ["c", "PESTLE"], ["d", "ADM"]],
+  correct:"a", why:"Анализ Парето выделяет немногие причины, дающие большинство обращений (раздел 5.4)."},
+ {id:"5-20", type:"single", ro:"5.4", bloom:3,
+  q:"Какое изменение можно сделать стандартным?",
+  opts:[["a", "Переход ИС вуза на новую версию"], ["b", "Создание учётной записи для нового сотрудника по утверждённой процедуре"], ["c", "Перенос серверной"], ["d", "Смена провайдера интернета"]],
+  correct:"b", why:"Стандартное изменение — частое, с низким риском и заранее утверждённой процедурой (раздел 5.5)."}
+];
+
+BANK[6] = [
+ {id:"6-01", type:"single", ro:"6.1", bloom:1,
+  q:"На каком этапе жизненного цикла ИТ-актива обязательно гарантированное уничтожение данных?",
+  opts:[["a","Планирование"],["b","Приобретение"],["c","Эксплуатация"],["d","Вывод из эксплуатации"]],
+  correct:"d", why:"Списанный компьютер с неудалёнными персональными данными — утечка, за которую отвечает организация (раздел 6.1)."},
+ {id:"6-02", type:"order", ro:"6.1", bloom:1,
+  q:"Расположите этапы жизненного цикла ИТ-актива по порядку.",
+  items:["Планирование","Приобретение","Ввод в эксплуатацию","Эксплуатация","Вывод из эксплуатации"], hint:"Первая строка — первый этап.",
+  why:"На каждом этапе реестр активов обновляется (раздел 6.1)."},
+ {id:"6-03", type:"multi", ro:"6.1", bloom:2,
+  q:"Что из перечисленного обычно учитывают как конфигурационные единицы в CMDB? Выберите все верные ответы.",
+  opts:[["a","Сервер базы данных ИС вуза"],["b","Версия приложения «Личный кабинет»"],["c","Файл настроек резервного копирования"],["d","SLA на услугу «Электронная зачётная книжка»"],["e","Клавиатура в аудитории"],["f","Пачка бумаги для принтера"]],
+  correct:["a","b","c","d"], why:"Конфигурационная единица — то, чем нужно управлять для предоставления услуги, включая документы. Клавиатуру учитывают как актив, но её связи с услугами не отслеживают (раздел 6.2)."},
+ {id:"6-04", type:"case", ro:"6.1", bloom:3,
+  q:"Вуз купил 200 лицензий офисной программы. Установлена она на 230 компьютерах, а реально используется на 150. Что сделать в первую очередь?",
+  opts:[["a","Докупить 30 лицензий"],["b","Удалить программу с компьютеров, где она не используется: установок станет не больше купленных лицензий"],["c","Ничего: используется меньше, чем куплено"],["d","Удалить программу со всех компьютеров"]],
+  correct:"b", why:"Нарушение лицензии определяется установками, а не использованием. После удаления 80 неиспользуемых установок останется 150 из 200 — докупать не нужно (раздел 6.1)."},
+ {id:"6-05", type:"hotspot", fig:"cloud", ro:"6.2", bloom:2,
+  q:"Нажмите на модель, в которой организация сама управляет операционной системой, а поставщик — виртуализацией, серверами и сетью.",
+  correct:"ciaas", why:"В IaaS поставщик даёт виртуальные серверы, хранилище и сеть; ОС и выше — забота организации (рис. 6.2)."},
+ {id:"6-06", type:"hotspot", fig:"cloud", ro:"6.2", bloom:2,
+  q:"Нажмите на модель, в которой за организацией остаются только данные и права доступа.",
+  correct:"csaas", why:"В SaaS поставщик управляет всем приложением, но данные, учётные записи и права доступа остаются за организацией (рис. 6.2)."},
+ {id:"6-07", type:"match", ro:"6.2", bloom:2,
+  q:"Сопоставьте решение и модель размещения.",
+  items:[["Серверы в собственной серверной вуза","Свой ЦОД"],["Аренда виртуальных серверов у провайдера","IaaS"],["Управляемая база данных у облачного провайдера","PaaS"],["Облачная почта и видеосвязь для сотрудников","SaaS"]],
+  why:"Чем выше модель, тем больше уровней берёт на себя поставщик (раздел 6.3)."},
+ {id:"6-08", type:"case", ro:"6.2", bloom:4,
+  q:"Вуз использует облачную систему дистанционного обучения (SaaS). Из-за слабых паролей преподавателей злоумышленники получили доступ к оценкам. Кто отвечает за инцидент?",
+  opts:[["a","Только поставщик: это его система"],["b","Организация: учётные записи и права доступа остаются за ней в любой модели"],["c","Никто: это облако"],["d","Преподаватели лично, а не вуз"]],
+  correct:"b", why:"Переход в облако перераспределяет ответственность, но не снимает её: данные и доступ всегда за организацией (раздел 6.3)."},
+ {id:"6-09", type:"match", ro:"6.3", bloom:1,
+  q:"Сопоставьте группу процессов ISO/IEC/IEEE 12207 и пример процесса.",
+  items:[["Процессы соглашения","Приобретение"],["Процессы организационного обеспечения проекта","Управление инфраструктурой"],["Процессы технического управления","Управление рисками"],["Технические процессы","Сопровождение"]],
+  why:"Стандарт выделяет четыре группы процессов (раздел 6.4)."},
+ {id:"6-10", type:"single", ro:"6.3", bloom:2,
+  q:"Какое утверждение об ISO/IEC/IEEE 12207 верно?",
+  opts:[["a","Стандарт требует использовать каскадную модель"],["b","Стандарт описывает процессы, а модель их выполнения выбирает организация"],["c","Стандарт описывает только разработку и не касается эксплуатации"],["d","Стандарт заменяет ITIL"]],
+  correct:"b", why:"Стандарт не навязывает модель; в него входят и эксплуатация, сопровождение, вывод из эксплуатации (раздел 6.4)."},
+ {id:"6-11", type:"multi", ro:"6.4", bloom:2,
+  q:"Какие разделы обязательно должны быть в регламенте? Выберите все верные ответы.",
+  opts:[["a","Роли и ответственность"],["b","Порядок действий"],["c","Записи: что фиксируется и где хранится"],["d","Порядок пересмотра"],["e","Фамилии всех сотрудников ИТ-службы"],["f","История создания ИТ-службы"]],
+  correct:["a","b","c","d"], why:"Регламент описывает роли, а не людей; записи нужны для проверки исполнения (раздел 6.5)."},
+ {id:"6-12", type:"single", ro:"6.4", bloom:3,
+  q:"Сколько участников с ролью A (Accountable) должно быть по одному шагу в матрице RACI?",
+  opts:[["a","Ровно один"],["b","Не менее двух"],["c","Столько, сколько исполнителей"],["d","Ни одного, если есть R"]],
+  correct:"a", why:"Если отвечают за результат двое, фактически не отвечает никто (раздел 6.5)."},
+ {id:"6-13", type:"case", ro:"6.4", bloom:5,
+  q:"В регламенте записано: «Иванов делает резервные копии по пятницам». Оцените этот пункт.",
+  opts:[["a","Хороший пункт: всё понятно"],["b","Пункт плохой: написан под человека, а не роль; нет описания проверки (пробного восстановления) и записей об исполнении"],["c","Пункт плохой: копии нужно делать по понедельникам"],["d","Хороший пункт, если добавить телефон Иванова"]],
+  correct:"b", why:"Регламент описывает роли и проверяемые действия; копия без пробного восстановления не даёт уверенности (раздел 6.5)."},
+ {id:"6-14", type:"order", ro:"6.5", bloom:1,
+  q:"Расположите этапы жизненного цикла контента по порядку.",
+  items:["Планирование","Создание","Согласование","Публикация","Актуализация","Архивирование или удаление"], hint:"Первая строка — первый этап.",
+  why:"У каждого раздела сайта должен быть владелец и дата следующей проверки (раздел 6.6)."},
+ {id:"6-15", type:"match", ro:"6.5", bloom:2,
+  q:"Сопоставьте принцип WCAG 2.2 и пример его нарушения.",
+  items:[["Воспринимаемость","Расписание опубликовано только картинкой без текста"],["Управляемость","Форму заявления нельзя заполнить без мыши"],["Понятность","Сообщение об ошибке не объясняет, что исправить"],["Надёжность","Разметка не распознаётся программой чтения с экрана"]],
+  why:"Четыре принципа WCAG: воспринимаемость, управляемость, понятность, надёжность (раздел 6.6)."},
+ {id:"6-16", type:"single", ro:"6.5", bloom:3,
+  q:"Какой минимальный контраст обычного текста с фоном требует WCAG 2.2 на уровне AA?",
+  opts:[["a","2:1"],["b","3:1"],["c","4,5:1"],["d","7:1"]],
+  correct:"c", why:"Критерий 1.4.3 (AA) — не менее 4,5:1 для обычного текста; 7:1 — уровень AAA (раздел 6.6)."},
+ {id:"6-17", type:"case", ro:"6.5", bloom:5,
+  q:"Руководство решило запустить новый сайт вуза сейчас, а доступность для людей с инвалидностью «проверить потом». Оцените решение.",
+  opts:[["a","Разумно: сначала запуск, потом улучшения"],["b","Рискованно: исправлять после запуска дороже; требования доступности включают в ТЗ, приёмку и регламент публикации"],["c","Разумно, если поставить кнопку «версия для слабовидящих»"],["d","Доступность нужна только государственным сайтам"]],
+  correct:"b", why:"Доступность нельзя «добавить потом»; проверка Акыйкатчы в 2026 г. показала, к чему это приводит (раздел 6.6)."},
+ {id:"6-18", type:"single", ro:"6.1", bloom:2,
+  q:"Почему форматирование диска недостаточно перед списанием компьютера?",
+  opts:[["a", "Оно занимает слишком много времени"], ["b", "Данные можно восстановить; нужна очистка или уничтожение носителя с записью в акте"], ["c", "Форматирование запрещено законом"], ["d", "Диск после форматирования нельзя продать"]],
+  correct:"b", why:"Удаление и форматирование не уничтожают данные (раздел 6.1)."},
+ {id:"6-19", type:"single", ro:"6.2", bloom:3,
+  q:"Систему переносят в облако без изменений, просто на виртуальную машину провайдера. Какая это стратегия из «6R»?",
+  opts:[["a", "Переработать (refactor)"], ["b", "Заменить на SaaS (repurchase)"], ["c", "Перенести как есть (rehost)"], ["d", "Вывести (retire)"]],
+  correct:"c", why:"Rehost — перенос без изменения архитектуры (раздел 6.3)."},
+ {id:"6-20", type:"single", ro:"6.2", bloom:2,
+  q:"Какая привычка помогает управлять облачными затратами?",
+  opts:[["a", "Не выключать ресурсы, чтобы не потерять данные"], ["b", "У каждого ресурса есть владелец и метка проекта, факт ежемесячно сравнивается с бюджетом"], ["c", "Оплачивать облако раз в год"], ["d", "Создавать тестовые серверы без ограничений"]],
+  correct:"b", why:"Владелец, метки и ежемесячная сверка — основа управления затратами (раздел 6.3)."}
+];
+
+BANK[7] = [
+ {id:"7-01", type:"single", ro:"7.1", bloom:1,
+  q:"Кто в вузе осуществляет руководство ИТ (governance)?",
+  opts:[["a","Системный администратор"],["b","Учёный совет и ректорат"],["c","Служба поддержки"],["d","Поставщик ИС вуза"]],
+  correct:"b", why:"Руководство определяет, что делать, и допустимый риск; это уровень руководящего органа. ИТ-служба управляет выполнением (раздел 7.1)."},
+ {id:"7-02", type:"multi", ro:"7.1", bloom:2,
+  q:"Какие решения относятся к руководству ИТ, а не к управлению? Выберите все верные ответы.",
+  opts:[["a","Утвердить допустимый уровень ИТ-риска"],["b","Определить приоритеты ИТ-проектов на три года"],["c","Настроить расписание резервного копирования"],["d","Решить инцидент в личном кабинете"],["e","Утвердить политику информационной безопасности"]],
+  correct:["a","b","e"], why:"Руководство отвечает на вопрос «что делать и какой риск допустим»; настройка копирования и решение инцидента — управление (раздел 7.1)."},
+ {id:"7-03", type:"single", ro:"7.1", bloom:1,
+  q:"Сколько принципов содержит ISO/IEC 38500 в редакции 2024 г.?",
+  opts:[["a","3"],["b","6"],["c","11"],["d","40"]],
+  correct:"c", why:"Редакция 2024 г. согласована с ISO 37000: вместо шести принципов 2015 г. — одиннадцать (раздел 7.1)."},
+ {id:"7-04", type:"match", ro:"7.2", bloom:1,
+  q:"Сопоставьте домен COBIT 2019 и его содержание.",
+  items:[["EDM","Оценка, направление и мониторинг (руководство)"],["APO","Выравнивание, планирование и организация"],["BAI","Создание, приобретение и внедрение"],["DSS","Предоставление, обслуживание и поддержка"],["MEA","Мониторинг, оценка и анализ"]],
+  why:"40 целей COBIT 2019 распределены по пяти доменам (раздел 7.2)."},
+ {id:"7-05", type:"single", ro:"7.2", bloom:2,
+  q:"Цели какого домена COBIT 2019 выполняются руководящим органом организации?",
+  opts:[["a","EDM"],["b","APO"],["c","DSS"],["d","MEA"]],
+  correct:"a", why:"EDM — домен руководства; остальные четыре относятся к управлению (раздел 7.2)."},
+ {id:"7-06", type:"order", ro:"7.2", bloom:2,
+  q:"Расположите уровни каскада целей COBIT по порядку.",
+  items:["Потребности заинтересованных сторон","Цели предприятия","Цели согласования","Цели руководства и управления"], hint:"Первая строка — начало каскада.",
+  why:"Каскад ведёт от потребностей к конкретным целям COBIT (раздел 7.2)."},
+ {id:"7-07", type:"case", ro:"7.2", bloom:4,
+  q:"Ректор поручил за год внедрить в вузе все 40 целей COBIT 2019. Оцените решение.",
+  opts:[["a","Правильно: полнота важнее всего"],["b","Нецелесообразно: по каскаду целей выбирают 5–7 приоритетных целей, остальные — позже"],["c","Правильно, если нанять консультантов"],["d","Нецелесообразно: COBIT подходит только банкам"]],
+  correct:"b", why:"Каскад нужен именно для выбора приоритетов; попытка внедрить всё сразу — типичная ошибка (разделы 4.6, 7.2)."},
+ {id:"7-08", type:"hotspot", fig:"risk", ro:"7.3", bloom:1,
+  q:"На схеме процесса менеджмента риска нажмите на шаг, на котором уровень риска сравнивают с критериями.",
+  correct:"rev", why:"Сравнительная оценка — третий шаг оценки риска после идентификации и анализа (рис. 7.1)."},
+ {id:"7-09", type:"hotspot", fig:"risk", ro:"7.3", bloom:2,
+  q:"Нажмите на элемент, который сопровождает весь процесс и обеспечивает обмен информацией с заинтересованными сторонами.",
+  correct:"rcomm", why:"Коммуникация и консультирование, как и мониторинг, охватывают все шаги, а не следуют после них (рис. 7.1)."},
+ {id:"7-10", type:"single", ro:"7.3", bloom:3,
+  q:"Вероятность риска оценена в 4 балла, последствия — в 3 балла по шкале 1–5. Каков уровень риска по матрице из раздела 7.3?",
+  opts:[["a","7"],["b","12"],["c","1"],["d","15"]],
+  correct:"b", why:"Уровень = вероятность × последствия = 4 × 3 = 12."},
+ {id:"7-11", type:"match", ro:"7.3", bloom:3,
+  q:"Сопоставьте решение и способ обработки риска.",
+  items:[["Отказаться от сбора ненужных паспортных данных","Избежать"],["Ввести двухфакторную аутентификацию","Снизить"],["Застраховать оборудование серверной","Передать"],["Ректорат решил не резервировать принтер кафедры","Принять"]],
+  why:"Четыре способа обработки риска (раздел 7.3)."},
+ {id:"7-12", type:"single", ro:"7.4", bloom:2,
+  q:"Студент подменил оценку в ИС вуза. Какое свойство информации нарушено?",
+  opts:[["a","Конфиденциальность"],["b","Целостность"],["c","Доступность"],["d","Ни одно"]],
+  correct:"b", why:"Целостность — точность и полнота информации (раздел 7.4)."},
+ {id:"7-13", type:"match", ro:"7.4", bloom:2,
+  q:"Сопоставьте тему мер приложения A ISO/IEC 27001:2022 и пример меры.",
+  items:[["Организационные","Политика информационной безопасности"],["Касающиеся персонала","Обучение и осведомлённость сотрудников"],["Физические","Ограничение доступа в серверную"],["Технологические","Резервное копирование"]],
+  why:"93 меры распределены по четырём темам (раздел 7.4)."},
+ {id:"7-14", type:"case", ro:"7.4", bloom:4,
+  q:"Руководитель ИТ-службы предлагает «для надёжности внедрить все 93 меры приложения A». Оцените предложение.",
+  opts:[["a","Правильно: чем больше мер, тем безопаснее"],["b","Неверно: меры выбирают по результатам оценки рисков и обосновывают в заявлении о применимости"],["c","Правильно, если хватит бюджета"],["d","Неверно: меры приложения A необязательны и их можно не рассматривать"]],
+  correct:"b", why:"Каждую меру рассматривают, но применяют по оценке рисков; решение фиксируют в заявлении о применимости (раздел 7.4)."},
+ {id:"7-15", type:"multi", ro:"7.5", bloom:2,
+  q:"Каким требованиям ст. 79 Цифрового кодекса КР должно отвечать согласие на обработку персональных данных? Выберите все верные ответы.",
+  opts:[["a","Добровольное"],["b","Конкретное и информированное"],["c","Сознательное"],["d","Запрос согласия включён в общий текст условий пользования"],["e","Запрос изложен сложным юридическим языком"]],
+  correct:["a","b","c"], why:"Согласие должно быть добровольным, конкретным, информированным и сознательным; оно ничтожно, если запрос не выделен из других или изложен сложным языком (ст. 79, раздел 7.5)."},
+ {id:"7-16", type:"single", ro:"7.5", bloom:3,
+  q:"В ИТ-компании 25 сотрудников, она обрабатывает персональные данные клиентов. Обязана ли она назначить ответственное лицо по ст. 88 Цифрового кодекса?",
+  opts:[["a","Да: назначение обязательно при численности более 10 работников"],["b","Нет: только государственные органы"],["c","Нет: только при обработке особых категорий"],["d","Да, но только при трансграничной передаче"]],
+  correct:"a", why:"Ст. 88 Цифрового кодекса: ответственное лицо определяется в организациях с количеством работников более десяти человек (раздел 7.5)."},
+ {id:"7-17", type:"case", ro:"7.5", bloom:4,
+  q:"Вуз разместил базу абитуриентов в зарубежном облачном сервисе, не заключив договор об обработке данных. Какие требования Цифрового кодекса нарушены?",
+  opts:[["a","Никакие: облако — это просто хранилище"],["b","Ст. 86 (письменный договор с обработчиком) и ст. 89 (условия трансграничной передачи)"],["c","Только требования к доступности сайтов"],["d","Только ст. 81 о данных детей"]],
+  correct:"b", why:"Облачный поставщик — обработчик; нужен договор, а передача за рубеж допустима при определённых основаниях (разделы 6.3, 7.5)."},
+ {id:"7-18", type:"single", ro:"7.1", bloom:2,
+  q:"Какую роль играет ИТ-комитет?",
+  opts:[["a", "Ремонтирует оборудование"], ["b", "Принимает решения о приоритетах и инвестициях в ИТ от имени руководства"], ["c", "Заменяет ИТ-службу"], ["d", "Проводит закупки"]],
+  correct:"b", why:"ИТ-комитет — орган руководства ИТ, распределяющий права на решения (раздел 7.1)."},
+ {id:"7-19", type:"single", ro:"7.3", bloom:2,
+  q:"Что такое RPO?",
+  opts:[["a", "Максимальное время восстановления услуги"], ["b", "Допустимая потеря данных, измеряемая временем от последней резервной копии"], ["c", "Время реакции службы поддержки"], ["d", "Срок окупаемости"]],
+  correct:"b", why:"RPO — целевая точка восстановления; RTO — целевое время восстановления (раздел 7.3)."},
+ {id:"7-20", type:"single", ro:"7.3", bloom:3,
+  q:"Для какого риска уместен ключевой индикатор «свободное место на сервере резервных копий < 15 %»?",
+  opts:[["a", "Отказ портала из-за наплыва абитуриентов"], ["b", "Потеря данных из-за невыполненного резервного копирования"], ["c", "Утечка персональных данных через фишинг"], ["d", "Срыв закупки"]],
+  correct:"b", why:"Индикатор показывает рост риска до инцидента: копии перестанут создаваться (раздел 7.3)."}
+];
+
+BANK[8] = [
+ {id:"8-01", type:"single", ro:"8.1", bloom:1,
+  q:"Какие из затрат ИТ-службы относятся к капитальным (CapEx)?",
+  opts:[["a","Ежемесячная подписка на облачные ресурсы"],["b","Покупка сервера, который прослужит пять лет"],["c","Зарплата системного администратора"],["d","Оплата интернета для корпусов"]],
+  correct:"b", why:"Капитальные затраты — покупка активов, служащих несколько лет. Подписка, зарплата и связь — регулярные операционные затраты (раздел 8.1)."},
+ {id:"8-02", type:"multi", ro:"8.1", bloom:2,
+  q:"Вуз размещает систему дистанционного обучения на собственных серверах. Какие затраты входят в совокупную стоимость владения? Выберите все верные ответы.",
+  opts:[["a","Оборудование и лицензии"],["b","Электроэнергия и помещение"],["c","Труд администратора"],["d","Обучение пользователей"],["e","Покупка учебников для библиотеки"]],
+  correct:["a","b","c","d"], why:"TCO включает все затраты на актив за жизненный цикл: покупку, эксплуатацию, труд, обучение. Учебники к этой системе не относятся (раздел 8.1)."},
+ {id:"8-03", type:"match", ro:"8.1", bloom:2,
+  q:"Сопоставьте часть бюджета ИТ и пример расходов вуза.",
+  items:[["Поддержание","Продление лицензий АИС «Учебная часть»"],["Развитие","Подключение нового факультета к системе дистанционного обучения"],["Преобразование","Электронный документооборот вместо бумажных приказов"]],
+  why:"Поддержание сохраняет работу существующих услуг, развитие их расширяет, преобразование создаёт новые способы работы (раздел 8.1)."},
+ {id:"8-04", type:"case", ro:"8.1", bloom:4,
+  q:"В примере раздела 8.1 подписка на облако за 5 лет (2,1 млн сом) дороже оборудования (1,5 млн сом), но TCO облака ниже. Почему?",
+  opts:[["a","Облако всегда дешевле собственных серверов"],["b","В TCO учитываются труд администратора, энергия и ремонт; в облачном варианте эти затраты меньше"],["c","Оборудование нужно покупать каждый год"],["d","В расчёте ошибка: TCO облака должно быть выше"]],
+  correct:"b", why:"Сравнивают все затраты за срок, а не цену покупки. При других исходных данных вывод может быть обратным (раздел 8.1)."},
+ {id:"8-05", type:"single", ro:"8.2", bloom:3,
+  q:"Затраты на проект за 5 лет — 2 000 000 сом, выгоды за тот же срок — 2 600 000 сом. Чему равен ROI?",
+  opts:[["a","30 %"],["b","130 %"],["c","23 %"],["d","60 %"]],
+  correct:"a", why:"ROI = (B − C) / C = (2 600 000 − 2 000 000) / 2 000 000 = 30 % (раздел 8.2)."},
+ {id:"8-06", type:"hotspot", fig:"proc", ro:"8.2", bloom:2,
+  q:"На схеме ИТ-закупки (рис. 8.1) нажмите этап, на котором рассчитывают NPV и срок окупаемости.",
+  correct:"zneed", why:"Экономический расчёт обосновывает потребность до включения закупки в план и бюджет (разделы 8.2, 8.4)."},
+ {id:"8-07", type:"case", ro:"8.2", bloom:5,
+  q:"Проект А: NPV = +300 000 сом, простой срок окупаемости 4 года. Проект Б: NPV = −50 000 сом, простой срок окупаемости 2 года. Средства есть на один проект. Какой выбрать?",
+  opts:[["a","Б, потому что он окупается быстрее"],["b","А: только его приведённые выгоды превышают затраты; Б с учётом стоимости денег не окупается"],["c","Любой, показатели равноценны"],["d","Ни один, потому что срок окупаемости больше года"]],
+  correct:"b", why:"Простой срок окупаемости не учитывает стоимость денег во времени и выгоды после окупаемости. Решающий показатель — NPV > 0 (раздел 8.2)."},
+ {id:"8-08", type:"hotspot", fig:"proc", ro:"8.3", bloom:1,
+  q:"Нажмите этап, на котором фиксируют требования к результату, уровню услуги, приёмке и условиям выхода.",
+  correct:"ztz", why:"Всё это входит в техническое задание. После выбора победителя технические характеристики менять нельзя (разделы 8.3, 8.4)."},
+ {id:"8-09", type:"multi", ro:"8.3", bloom:3,
+  q:"Какие требования в ТЗ на закупку ноутбуков являются ограничивающими? Выберите все верные ответы.",
+  opts:[["a","Ноутбук марки X модели Y"],["b","Процессор не менее 8 ядер, оперативная память не менее 16 ГБ"],["c","Поставщик — официальный дилер одного конкретного производителя"],["d","Гарантия не менее 3 лет"],["e","Время автономной работы не менее 8 часов"]],
+  correct:["a","c"], why:"Требования должны описывать характеристики и не носить ограничивающего характера (ст. 11 Закона № 27). Марка и дилер одного производителя исключают конкуренцию (раздел 8.3)."},
+ {id:"8-10", type:"order", ro:"8.3", bloom:1,
+  q:"Расположите этапы ИТ-закупки в порядке, показанном на рис. 8.1.",
+  items:["Потребность и обоснование","План закупок","Техническое задание","Выбор метода закупки","Объявление на веб-портале","Оценка предложений","Заключение договора","Приёмка","Управление договором"], hint:"Первая строка — первый этап.",
+  why:"Подготовка (1–3) и исполнение (7–9) — зона ИТ-службы, процедура (4–6) проходит на портале (раздел 8.4, рис. 8.1)."},
+ {id:"8-11", type:"case", ro:"8.3", bloom:3,
+  q:"Вуз покупает 20 одинаковых ноутбуков с чётко описанными характеристиками. Какой метод закупки подходит по Закону № 27?",
+  opts:[["a","Из одного источника"],["b","Запрос котировок"],["c","Неограниченный метод с переговорами"],["d","Ограниченный метод"]],
+  correct:"b", why:"Запрос котировок — для готовых стандартных товаров с чётким описанием (ст. 16). Ограниченный метод утратил силу, переговоры нужны, когда характеристики заранее неизвестны (раздел 8.4)."},
+ {id:"8-12", type:"hotspot", fig:"proc", ro:"8.4", bloom:2,
+  q:"Нажмите этап, на котором ИТ-служба раз в квартал заполняет карточку оценки поставщика.",
+  correct:"zman", why:"Оценка исполнения — часть управления договором; её результаты переходят в следующий цикл планирования (раздел 8.5, рис. 8.1)."},
+ {id:"8-13", type:"multi", ro:"8.4", bloom:2,
+  q:"Какие из перечисленных являются рисками аутсорсинга? Выберите все верные ответы.",
+  opts:[["a","Зависимость от поставщика (закрытые форматы, уникальные доработки)"],["b","Потеря собственных компетенций"],["c","Переход к поставщику ответственности владельца персональных данных"],["d","Уход поставщика с рынка до конца договора"],["e","Автоматическое снижение TCO"]],
+  correct:["a","b","d"], why:"Ответственность владельца данных остаётся за организацией: поставщик становится обработчиком (ст. 86 Цифрового кодекса). Снижение TCO не гарантировано (раздел 8.5)."},
+ {id:"8-14", type:"case", ro:"8.4", bloom:5,
+  q:"Договор с поставщиком системы дистанционного обучения заканчивается. Данные хранятся в закрытом формате, возврат данных договором не предусмотрен. Что должен сделать вуз при новой закупке?",
+  opts:[["a","Продлить договор с тем же поставщиком, так как выбора нет"],["b","Включить в ТЗ и договор стратегию выхода: возврат данных в открытом формате, документацию, помощь при переходе"],["c","Отказаться от аутсорсинга и разработать систему самостоятельно"],["d","Договориться о возврате данных устно после подписания"]],
+  correct:"b", why:"Условия выхода добавляют до подписания: после заключения договора ключевые параметры менять нельзя (разделы 8.3, 8.5)."},
+ {id:"8-15", type:"match", ro:"8.5", bloom:1,
+  q:"Сопоставьте стадию развития команды по Такману и задачу руководителя.",
+  items:[["Формирование","Объяснить цель, распределить роли, договориться о правилах"],["Бурление","Разбирать конфликты по существу, не подавлять их"],["Нормирование","Закрепить договорённости, передать часть решений команде"],["Функционирование","Снимать препятствия, защищать от лишних задач"]],
+  why:"На каждой стадии нужна своя роль руководителя (раздел 8.6)."},
+ {id:"8-16", type:"multi", ro:"8.5", bloom:2,
+  q:"Какие факторы по теории Герцберга являются мотиваторами? Выберите все верные ответы.",
+  opts:[["a","Признание результата"],["b","Размер зарплаты"],["c","Интересная работа"],["d","Условия труда"],["e","Профессиональный рост"]],
+  correct:["a","c","e"], why:"Зарплата и условия труда — гигиенические факторы: их нехватка вызывает недовольство, но их улучшение само не мотивирует (раздел 8.6)."},
+ {id:"8-17", type:"case", ro:"8.5", bloom:3,
+  q:"Начальник учебного отдела — владелец результата проекта. Он предлагает сам настраивать систему и сам же её принимать, чтобы ускорить работу. Оцените предложение.",
+  opts:[["a","Хорошая идея: меньше согласований"],["b","Нельзя совмещать роли владельца результата и исполнителя: тот, кто делает работу, не должен сам её принимать"],["c","Допустимо, если он пройдёт обучение"],["d","Роли в малой группе не важны"]],
+  correct:"b", why:"В малой группе можно совмещать роли аналитика и исполнителя, но не исполнителя и принимающего (раздел 8.6)."},
+ {id:"8-18", type:"single", ro:"8.2", bloom:3,
+  q:"При снижении выгод проекта NPV стал отрицательным. Что показал анализ чувствительности?",
+  opts:[["a", "Проект выгоден при любых условиях"], ["b", "Вывод о проекте зависит от оценки выгод; её нужно проверить и назначить ответственных за их достижение"], ["c", "Ставку дисконтирования нужно снизить"], ["d", "Расчёт NPV ошибочен"]],
+  correct:"b", why:"Анализ чувствительности показывает, при каких допущениях проект перестаёт окупаться (раздел 8.2)."},
+ {id:"8-19", type:"single", ro:"8.3", bloom:3,
+  q:"Какое требование ТЗ можно проверить при приёмке?",
+  opts:[["a", "Система должна работать быстро"], ["b", "Страница личного кабинета открывается не дольше 3 с при 500 одновременных пользователях"], ["c", "Интерфейс должен быть удобным"], ["d", "Система должна быть современной"]],
+  correct:"b", why:"Хорошее требование измеримо и проверяемо (раздел 8.3)."},
+ {id:"8-20", type:"single", ro:"8.5", bloom:2,
+  q:"Какая мера снижает сопротивление изменениям?",
+  opts:[["a", "Запретить работать по-старому без объяснений"], ["b", "Объяснить, что изменится для сотрудника, включить пользователей в пилот и назначить «амбассадоров» в подразделениях"], ["c", "Ввести систему без обучения"], ["d", "Отложить внедрение до ухода несогласных"]],
+  correct:"b", why:"Проекты чаще срываются из-за людей, чем из-за техники (раздел 8.6)."}
+];
+
+BANK[9] = [
+ {id:"9-01", type:"single", ro:"9.1", bloom:1,
+  q:"Какая область находится в центре колеса DAMA-DMBOK?",
+  opts:[["a","Качество данных"],["b","Руководство данными (data governance)"],["c","Хранилища данных и BI"],["d","Безопасность данных"]],
+  correct:"b", why:"Руководство данными задаёт политики, роли и права решений; остальные десять областей опираются на него (раздел 9.1)."},
+ {id:"9-02", type:"match", ro:"9.1", bloom:2,
+  q:"Сопоставьте роль в управлении данными об успеваемости и её исполнителя в вузе.",
+  items:[["Владелец данных","Начальник учебного отдела: решает, кто и зачем использует данные"],["Распорядитель данных","Методист деканата: следит за качеством и описанием данных"],["Хранитель данных","ИТ-служба: хранение, доступ, резервное копирование"]],
+  why:"Данными владеют подразделения; ИТ-служба их хранит и защищает, но не решает вопросы об их смысле (раздел 9.1)."},
+ {id:"9-03", type:"match", ro:"9.1", bloom:2,
+  q:"Сопоставьте измерение качества данных и показатель для реестра студентов.",
+  items:[["Уникальность","Число студентов с двумя и более записями"],["Полнота","Доля записей с заполненным ПИН"],["Согласованность","Расхождения между учебной частью и бухгалтерией"],["Своевременность","Срок от приказа об отчислении до записи в системе"]],
+  why:"Для каждого измерения задают показатель и целевое значение (раздел 9.2)."},
+ {id:"9-04", type:"case", ro:"9.1", bloom:4,
+  q:"Число студентов в отчёте для МОН КР каждый семестр расходится с данными бухгалтерии. Сотрудник ИТ-службы вручную правит отчёт перед отправкой. Оцените такую практику.",
+  opts:[["a","Правильно: отчёт уходит без ошибок"],["b","Неправильно: нужно найти причину расхождения и исправить источник данных, назначив владельца данных"],["c","Правильно, если правки согласованы с бухгалтерией"],["d","Расхождения допустимы, их не нужно устранять"]],
+  correct:"b", why:"Исправляют источник, а не отчёт. Повторяющиеся ошибки данных разбирают как проблемы (разделы 9.2, 5.4)."},
+ {id:"9-05", type:"single", ro:"9.2", bloom:2,
+  q:"В метаданных цифровой записи нет указаний на ограничение доступа. Как она рассматривается по Цифровому кодексу?",
+  opts:[["a","Как конфиденциальная до решения владельца"],["b","Как общедоступная"],["c","Как персональные данные"],["d","Как служебная информация"]],
+  correct:"b", why:"Цифровые записи предполагаются общедоступными, если метаданные не указывают на ограничение доступа (ст. 59, раздел 9.1)."},
+ {id:"9-06", type:"multi", ro:"9.2", bloom:2,
+  q:"Какие меры обязан принимать участник нацэкосистемы, обрабатывающий персональные данные (ст. 167 Цифрового кодекса)? Выберите все верные ответы.",
+  opts:[["a","Учитывать все операции с данными и всех лиц, получивших доступ"],["b","Публиковать данные только в обобщённом виде"],["c","Сообщать на сайте о составе и целях обработки данных"],["d","Передавать данные любому участнику по его запросу"],["e","Хранить данные только на бумаге"]],
+  correct:["a","b","c"], why:"Данные не передаются другим участникам, кроме случаев, установленных законом; бумажное хранение не требуется (раздел 9.3)."},
+ {id:"9-07", type:"single", ro:"9.2", bloom:1,
+  q:"На какой платформе построена система цифрового взаимодействия «Түндүк»?",
+  opts:[["a","X-Road"],["b","G-Cloud"],["c","ServiceNow"],["d","1С"]],
+  correct:"a", why:"«Түндүк» использует эстонскую платформу X-Road: данные остаются у владельцев, участники подключаются через серверы безопасности (раздел 9.3)."},
+ {id:"9-08", type:"match", ro:"9.3", bloom:2,
+  q:"Сопоставьте функцию AIOps и практику, которую она поддерживает.",
+  items:[["Корреляция событий","Управление инцидентами"],["Анализ первопричин","Управление проблемами"],["Обнаружение аномалий","Мониторинг и управление мощностью"],["Автоматизация действий","Стандартные изменения"]],
+  why:"AIOps не заменяет практики главы 5, а ускоряет их (раздел 9.4)."},
+ {id:"9-09", type:"multi", ro:"9.3", bloom:2,
+  q:"Какие риски связаны с помощником на основе генеративного ИИ в службе поддержки? Выберите все верные ответы.",
+  opts:[["a","Уверенно сформулированные неверные инструкции"],["b","Передача персональных данных во внешний сервис"],["c","Тиражирование ошибки при автоматическом выполнении"],["d","Гарантированное снижение числа инцидентов"],["e","Потеря навыков сотрудниками"]],
+  correct:["a","b","c","e"], why:"Снижение числа инцидентов не гарантировано: польза ИИ зависит от качества данных ИТ-службы (раздел 9.4)."},
+ {id:"9-10", type:"case", ro:"9.3", bloom:4,
+  q:"ИТ-служба хочет, чтобы система AIOps с первого дня автоматически перезапускала серверы при любой обнаруженной аномалии. Оцените план.",
+  opts:[["a","Хороший план: так быстрее восстанавливать услуги"],["b","Рискованный: начинают с режима рекомендаций, а автоматически выполняют только действия, оформленные как стандартные изменения"],["c","План верен, если серверы в облаке"],["d","AIOps нельзя применять в государственных организациях"]],
+  correct:"b", why:"Автоматическое действие может тиражировать ошибку на все серверы; полностью автоматическое устранение сбоев пока ограничено хорошо изученными ситуациями (раздел 9.4)."},
+ {id:"9-11", type:"hotspot", fig:"ai", ro:"9.4", bloom:1,
+  q:"На схеме (рис. 9.1) нажмите этап, обязательный для любой системы ИИ, применяемой в КР.",
+  correct:"zass", why:"Оценке опасности подлежат все системы ИИ (ст. 193 Цифрового кодекса, раздел 9.5)."},
+ {id:"9-12", type:"hotspot", fig:"ai", ro:"9.4", bloom:2,
+  q:"Система отнесена к повышенной опасности, система управления рисками создана. Нажмите этап, который владелец проходит непосредственно перед началом применения.",
+  correct:"zdecl", why:"До начала применения владелец принимает декларацию соответствия, подписанную квалифицированной цифровой подписью, и размещает её на сайте (ст. 195)."},
+ {id:"9-13", type:"single", ro:"9.4", bloom:1,
+  q:"Сколько мер содержит приложение A ISO/IEC 42001:2023?",
+  opts:[["a","93 меры в 4 темах"],["b","38 мер в 9 группах"],["c","40 целей в 5 доменах"],["d","14 процессов"]],
+  correct:"b", why:"38 мер в группах A.2–A.10. 93 меры — это ISO/IEC 27001:2022, 40 целей — COBIT 2019, 14 процессов — FitSM (раздел 9.5)."},
+ {id:"9-14", type:"case", ro:"9.4", bloom:5,
+  q:"Вуз подключил внешний сервис ИИ для проверки эссе; сервис отнесён к повышенной опасности, по его результату ставят оценки. Кем является вуз по Цифровому кодексу и что он обязан делать?",
+  opts:[["a","Владельцем: разработать техническую документацию и принять декларацию"],["b","Пользователем: применять систему по руководству, назначить ответственных за контроль, хранить журналы и сообщать студентам, как получен результат"],["c","Никем: ответственность полностью на поставщике сервиса"],["d","Пользователем, но обязанностей у него нет"]],
+  correct:"b", why:"Вуз, подключивший чужой сервис, — пользователь; его обязанности установлены ст. 196 (раздел 9.5)."},
+ {id:"9-15", type:"single", ro:"9.5", bloom:1,
+  q:"Каким документом утверждена Концепция цифровой трансформации КР на 2024–2028 годы?",
+  opts:[["a","Законом КР"],["b","Указом Президента КР от 5 апреля 2024 г. № 90"],["c","Постановлением Кабинета Министров 2022 г."],["d","Приказом МОН КР"]],
+  correct:"b", why:"Концепция утверждена Указом Президента КР № 90 от 5 апреля 2024 г. (раздел 9.6)."},
+ {id:"9-16", type:"match", ro:"9.5", bloom:2,
+  q:"Сопоставьте направление Концепции цифровой трансформации и тему книги, которая помогает его реализовать.",
+  items:[["Интеграция госсистем","Обмен данными через «Түндүк»"],["Цифровая инфраструктура","G-Cloud и совокупная стоимость владения"],["Управление на основе данных","Управление и качество данных"],["Кадры","Роли ИТ-службы и проектная команда"]],
+  why:"Связь шагов дорожной карты с направлениями Концепции помогает обосновать бюджет и закупки (раздел 9.6)."},
+ {id:"9-17", type:"case", ro:"9.5", bloom:5,
+  q:"В дорожной карте вуза есть пункт «Внедрить ИИ в 2027 году». Как его улучшить?",
+  opts:[["a","Оставить как есть: формулировка соответствует Концепции"],["b","Указать конкретную задачу и результат, нужные данные и их качество, владельца результата, оценку опасности и связь с направлением Концепции"],["c","Заменить на «Купить сервер для ИИ»"],["d","Перенести пункт на 2028 год"]],
+  correct:"b", why:"Технология — средство. Без задачи, данных, владельца и оценки опасности проект повторит судьбу системы, купленной до описания услуг (раздел 9.6)."},
+ {id:"9-18", type:"single", ro:"9.1", bloom:2,
+  q:"Что указывают в карточке каталога данных?",
+  opts:[["a", "Только название таблицы"], ["b", "Описание набора, владельца, источник, состав полей, режим доступа и качество"], ["c", "Пароль к базе данных"], ["d", "Стоимость сервера"]],
+  correct:"b", why:"Карточка — форма ведения метаданных (раздел 9.1)."},
+ {id:"9-19", type:"single", ro:"9.1", bloom:3,
+  q:"Данные заочного отделения вводились нерегулярно. Чем это опасно для модели прогноза отчислений?",
+  opts:[["a", "Ничем, если данных много"], ["b", "Модель будет ошибаться именно на этих студентах: данные непредставительны"], ["c", "Модель станет работать быстрее"], ["d", "Это влияет только на отчёты"]],
+  correct:"b", why:"Для ИИ важна не только полнота, но и представительность данных (раздел 9.2)."},
+ {id:"9-20", type:"single", ro:"9.3", bloom:3,
+  q:"Как правильно спланировать пилот ИИ-помощника службы поддержки?",
+  opts:[["a", "Запустить и посмотреть, понравится ли"], ["b", "Заранее задать измеримые критерии успеха и условия остановки, проверить ответы на ошибки"], ["c", "Сразу заменить им первую линию"], ["d", "Не сообщать пользователям, что отвечает ИИ"]],
+  correct:"b", why:"Пилот планируют как проект с критериями, заданными заранее (раздел 9.4)."}
+];
+
+/* ---------- helpers ---------- */
+const app = document.getElementById("app");
+function h(tag, attrs, ...kids){
+  const el = document.createElement(tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)){
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()){ if (c == null || c === false) continue; el.append(c.nodeType ? c : document.createTextNode(String(c))); }
+  return el;
+}
+const pct = x => Math.round(x * 100);
+const mean = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0;
+const variance = a => { if (a.length < 2) return 0; const m = mean(a); return a.reduce((s, x) => s + (x - m) * (x - m), 0) / (a.length - 1); };
+const median = a => { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+function pearson(x, y){
+  const n = x.length; if (n < 3) return null;
+  const mx = mean(x), my = mean(y); let sxy = 0, sxx = 0, syy = 0;
+  for (let i = 0; i < n; i++){ const a = x[i] - mx, b = y[i] - my; sxy += a * b; sxx += a * a; syy += b * b; }
+  return (sxx && syy) ? sxy / Math.sqrt(sxx * syy) : null;
+}
+function shuffle(a, seed){ const r = a.slice(); let s = seed || 1; for (let i = r.length - 1; i > 0; i--){ s = (s * 9301 + 49297) % 233280; const j = Math.floor(s / 233280 * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; }
+function bloomTag(b){ return h("span", {class:"tag bl", style:`background:var(--b${b})`}, `Блум ${b} · ${BLOOM[b]}`); }
+const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} } };
+const fmt1 = x => (Math.round(x * 10) / 10).toString().replace(".", ",");
+const fmt2 = x => x == null ? "—" : x.toFixed(2).replace(".", ",");
+const chTitle = n => (CHAPTERS.find(c => c.n === n) || {}).t || "";
+function withTimeout(p, ms){ return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej({code:"timeout"}), ms))]); }
+
+/* ---------- capabilities ---------- */
+let db = null, user = null, uid = null, isTeacher = false, downloads = null;
+const config = {};
+const capsReady = (async () => {
+  try {
+    if (!window.claude || !window.claude.use) return;
+    user = await window.claude.use("user");
+    if (user){ try { isTeacher = !!(await user.canEdit()); } catch(e){} try { uid = await user.id(); } catch(e){} }
+    db = await window.claude.use("db");
+    try { downloads = await window.claude.use("downloads"); } catch(e){ downloads = null; }
+  } catch(e){ db = null; }
+  renderNav();
+  if (route() === "analytics") render();
+})();
+async function getConfig(ch){
+  if (config[ch]) return config[ch];
+  await capsReady;
+  let c = {pass: DEFAULT_PASS, angoff: null};
+  if (db){ try { const s = await withTimeout(db.doc("config/ch" + ch).get(), 8000); if (s.exists){ const d = s.data(); if (typeof d.pass === "number") c = {pass: d.pass, angoff: d.angoff || null, method: d.method || null}; } } catch(e){} }
+  config[ch] = c; return c;
+}
+
+/* ---------- routing ---------- */
+function route(){ return (location.hash || "").replace(/^#/, ""); }
+window.addEventListener("hashchange", () => { leaveQ(); render(); });
+function renderNav(){
+  const nav = document.getElementById("nav"); nav.textContent = "";
+  const r = route();
+  nav.append(h("a", {class:"navlink", href:"#", "aria-current": r === "" ? "page" : null}, "Главы"));
+  if (isTeacher) nav.append(h("a", {class:"navlink", href:"#analytics", "aria-current": r === "analytics" ? "page" : null}, "Аналитика"));
+}
+
+/* ---------- attempt ---------- */
+let att = null;
+function pickQuestions(ch, seed){
+  const bank = BANK[ch], k = PER_TEST[ch];
+  if (!k || k >= bank.length) return bank.slice();
+  const byRo = {}; bank.forEach(q => (byRo[q.ro] = byRo[q.ro] || []).push(q));
+  const ros = Object.keys(byRo), picked = [];
+  ros.forEach((r, i) => { const share = Math.max(1, Math.round(k * byRo[r].length / bank.length)); picked.push(...shuffle(byRo[r], seed + i).slice(0, share)); });
+  return bank.filter(q => picked.slice(0, k).includes(q));
+}
+function startAttempt(ch, mode){
+  const seed = Date.now() % 100000;
+  const prefs = store.get("trainer-prefs") || {};
+  att = { ch, mode, seed, i:0, ans:{}, conf:{}, time:{}, checked:{}, touched:{}, done:false, saved:null,
+    uni: prefs.uni || "", group: prefs.group || "",
+    qs: pickQuestions(ch, seed).map((q, k) => Object.assign({}, q, {
+      _opts: q.opts ? shuffle(q.opts, seed + k) : null,
+      _choices: q.type === "match" ? shuffle(q.choices || [...new Set(q.items.map(p => p[1]))], seed + k + 3) : null
+    })) };
+  att.qs.forEach((q, k) => { if (q.type === "order") att.ans[q.id] = shuffle(q.items.map((_, j) => j), seed + k + 7); });
+  att.tId = null;
+}
+function leaveQ(){ if (att && att.tId && !att.done){ att.time[att.tId] = (att.time[att.tId] || 0) + (Date.now() - att.tShown) / 1000; att.tId = null; } }
+function go(i){ leaveQ(); att.i = i; render(); }
+
+function grade(q, a){
+  if (a == null) return 0;
+  if (q.type === "single" || q.type === "case" || q.type === "hotspot") return a === q.correct ? 1 : 0;
+  if (q.type === "multi"){ const sel = new Set(a), cor = new Set(q.correct); let hit = 0, wrong = 0; sel.forEach(x => cor.has(x) ? hit++ : wrong++); return Math.max(0, (hit - wrong) / cor.size); }
+  if (q.type === "match"){ let ok = 0; q.items.forEach((p, j) => { if (a[j] === p[1]) ok++; }); return ok / q.items.length; }
+  if (q.type === "order"){ let ok = 0; a.forEach((v, pos) => { if (v === pos) ok++; }); return ok / a.length; }
+  return 0;
+}
+function hasAnswer(q){
+  const a = att.ans[q.id];
+  if (q.type === "order") return !!att.touched[q.id];
+  if (q.type === "multi") return !!(a && a.length);
+  if (q.type === "match") return !!(a && q.items.every((_, j) => a[j]));
+  return a != null;
+}
+const answered = q => hasAnswer(q) && !!att.conf[q.id];
+const cbmPoints = (f, c) => c ? (f === 1 ? CBM[c][0] : CBM[c][1]) : 0;
+
+/* ---------- views ---------- */
+function render(){
+  renderNav();
+  const r = route();
+  app.textContent = "";
+  window.scrollTo(0, 0);
+  const m = r.match(/^ch(\d+)$/);
+  if (m && BANK[+m[1]]) return viewChapter(+m[1]);
+  if (r === "analytics") return viewAnalytics();
+  return viewHome();
+}
+
+function viewHome(){
+  const last = store.get("trainer-last") || {};
+  app.append(
+    h("div", {class:"eyebrow"}, "Учебное пособие · направление 710500"),
+    h("h1", null, "Проверьте себя по каждой главе"),
+    h("p", {class:"lead"}, "Тест открывается по QR-коду в конце главы. Задания разных типов: выбор ответа, соответствие, последовательность, работа со схемой и кейсы. К каждому ответу вы отмечаете, насколько в нём уверены: так видно не только что вы знаете, но и где знание ещё непрочное."),
+    h("div", {class:"grid"}, CHAPTERS.map(c => h("a", {class:"ch" + (c.ready ? "" : " off"), href: c.ready ? `#ch${c.n}` : null, "aria-disabled": c.ready ? null : "true"},
+      h("span", {class:"code"}, `Глава ${c.n}`), h("span", {class:"t"}, c.t),
+      h("span", {class:"st"}, c.ready ? (last[c.n] != null ? `Последний результат: ${last[c.n]}%` : `${(PER_TEST[c.n] || BANK[c.n].length)} заданий · ~15 мин`) : "Готовится")))),
+    h("div", {class:"card"},
+      h("h3", null, "Как оценивается тест"),
+      h("p", {class:"hint"}, "Задание с одним ответом, кейс и графическое задание: 1 балл или 0. Несколько ответов: доля верно выбранных за вычетом ошибочных. Соответствие и последовательность: доля верных позиций. Проходной балл главы устанавливает преподаватель; по умолчанию — 70%."),
+      h("p", {class:"hint"}, "Уверенность в ответе на оценку не влияет. Она даёт отдельный балл уверенности: за верный ответ +1, +2 или +3, за неверный 0, −2 или −6 — в зависимости от того, насколько вы были уверены."),
+      h("div", {class:"legend"}, [1,2,3,4,5,6].map(b => h("span", null, h("i", {class:"sw", style:`background:var(--b${b})`}), `${b} ${BLOOM[b]}`))))
+  );
+}
+
+function viewChapter(ch){
+  if (att && att.ch === ch && !att.done && att.started) return viewQuestion();
+  if (att && att.ch === ch && att.done) return viewResult();
+  return viewStart(ch);
+}
+
+function viewStart(ch){
+  const prefs = store.get("trainer-prefs") || {};
+  let mode = prefs.mode || "train", uni = prefs.uni || "", group = prefs.group || "";
+  const n = PER_TEST[ch] || BANK[ch].length;
+  const modeSeg = h("div", {class:"seg", role:"group", "aria-label":"Режим"});
+  const drawMode = () => { modeSeg.textContent = ""; Object.entries(MODES).forEach(([k, t]) => modeSeg.append(h("button", {type:"button", "aria-pressed": mode === k ? "true" : "false", onclick:() => { mode = k; drawMode(); }}, t))); modeHint.textContent = mode === "train" ? "После каждого ответа сразу видно, верен ли он, и объяснение." : "Объяснения открываются только после завершения теста. Используйте этот режим для зачёта."; };
+  const modeHint = h("p", {class:"hint"});
+  drawMode();
+  const uniSel = h("select", {id:"uni"}, h("option", {value:""}, "— выберите вуз —"), UNIS.map(u => h("option", {value:u, selected: uni === u}, u)));
+  const grpIn = h("input", {type:"text", id:"grp", value: group, placeholder:"например, ИТУ-1-24", autocomplete:"off"});
+  app.append(
+    h("div", {class:"eyebrow"}, `Глава ${ch}`), h("h1", null, chTitle(ch)),
+    h("div", {class:"card"},
+      h("h3", null, "Режим"), modeSeg, modeHint),
+    h("div", {class:"card"},
+      h("h3", null, "Ваш вуз и группа"),
+      h("p", {class:"hint"}, "Нужны преподавателю, чтобы сравнивать группы. Запоминаются на этом устройстве."),
+      h("div", {class:"fields"}, h("div", {class:"field"}, h("label", {for:"uni"}, "Вуз"), uniSel), h("div", {class:"field"}, h("label", {for:"grp"}, "Группа"), grpIn))),
+    h("div", {class:"card"},
+      h("h3", null, "Отметка уверенности"),
+      h("p", {class:"hint"}, "После каждого ответа выберите, насколько вы уверены. Отмечайте честно: самый ценный сигнал — уверенная ошибка, она показывает ложное представление, которое стоит разобрать."),
+      h("div", {class:"tbl"}, h("table", null,
+        h("thead", null, h("tr", null, h("th", null, "Уверенность"), h("th", {class:"num"}, "Верно"), h("th", {class:"num"}, "Неверно"), h("th", null, "Когда выбирать"))),
+        h("tbody", null, [1,2,3].map(c => h("tr", null, h("td", null, CONF[c]), h("td", {class:"num"}, "+" + CBM[c][0]), h("td", {class:"num"}, String(CBM[c][1])), h("td", null, `вероятность верного ответа ${IDEAL[c]}`))))))),
+    h("div", {class:"row"}, h("span", {class:"hint"}, `${n} заданий · примерно ${Math.round(n*0.9)} минут`), h("span", {class:"spacer"}),
+      h("button", {class:"btn", onclick:() => {
+        store.set("trainer-prefs", {mode, uni: uniSel.value, group: grpIn.value.trim()});
+        startAttempt(ch, mode); att.uni = uniSel.value; att.group = grpIn.value.trim(); att.started = true; render();
+      }}, "Начать тест"))
+  );
+}
+
+function viewQuestion(){
+  const q = att.qs[att.i], n = att.qs.length, train = att.mode === "train", locked = train && att.checked[q.id];
+  att.tId = locked ? null : q.id; att.tShown = Date.now();
+  app.append(
+    h("div", {class:"row"}, h("div", {class:"eyebrow"}, `Глава ${att.ch} · ${MODES[att.mode]}`), h("span", {class:"spacer"}), h("span", {class:"tag"}, `${att.i + 1} / ${n}`)),
+    h("div", {class:"progress", role:"navigation", "aria-label":"Задания"}, att.qs.map((qq, k) => h("button", {class:"dot" + (k === att.i ? " cur" : answered(qq) ? " done" : ""), "aria-label":`Задание ${k + 1}`, onclick:() => go(k)})))
+  );
+  const card = h("div", {class:"card"},
+    h("div", {class:"meta"}, h("span", {class:"tag"}, TYPES[q.type]), h("span", {class:"tag", title:RO[q.ro]}, `РО ${q.ro}`), bloomTag(q.bloom)),
+    h("div", {class:"qtext"}, q.q), renderInput(q, locked));
+  const c = att.conf[q.id];
+  card.append(h("div", {class:"conf"}, h("div", {class:"hint"}, "Насколько вы уверены в ответе?"),
+    h("div", {class:"seg", role:"group", "aria-label":"Уверенность"}, [1,2,3].map(k => h("button", {type:"button", disabled: locked, "aria-pressed": c === k ? "true" : "false", onclick:() => { att.conf[q.id] = k; rerender(); }}, `${CONF[k]} (${k})`)))));
+  if (train){
+    if (locked){
+      const f = grade(q, att.ans[q.id]), cls = f === 1 ? "g" : f > 0 ? "p" : "b", pts = cbmPoints(f, att.conf[q.id]);
+      card.append(h("div", {class:"fb " + cls}, h("b", null, f === 1 ? "Верно" : f > 0 ? `Частично верно · ${pct(f)}%` : "Неверно"),
+        h("span", null, `Балл уверенности: ${pts > 0 ? "+" : ""}${pts}` + (f < 1 && att.conf[q.id] >= 2 ? " — уверенная ошибка, разберите это задание." : "")),
+        h("span", null, q.why)));
+    } else {
+      card.append(h("div", {class:"row"}, h("span", {class:"hint"}, answered(q) ? "" : "Дайте ответ и отметьте уверенность."), h("span", {class:"spacer"}),
+        h("button", {class:"btn ghost", disabled: !answered(q), onclick:() => { leaveQ(); att.checked[q.id] = true; render(); }}, "Проверить ответ")));
+    }
+  }
+  app.append(card);
+  const left = att.qs.filter(qq => !answered(qq)).length;
+  app.append(h("div", {class:"row"},
+    h("button", {class:"btn ghost", disabled: att.i === 0, onclick:() => go(att.i - 1)}, "Назад"), h("span", {class:"spacer"}),
+    att.i < n - 1 ? h("button", {class:"btn", onclick:() => go(att.i + 1)}, "Далее")
+                  : h("button", {class:"btn", onclick:() => finish(false)}, left ? `Завершить (не готово: ${left})` : "Завершить тест")));
+}
+function rerender(){ const t = att.tShown, id = att.tId; app.textContent = ""; renderNav(); viewQuestion(); att.tShown = t; att.tId = id; }
+
+function renderInput(q, locked){
+  const a = att.ans[q.id];
+  const set = v => { att.ans[q.id] = v; rerender(); };
+  if (q.type === "single" || q.type === "case"){
+    return h("div", {class:"opts", role:"radiogroup"}, q._opts.map(([k, t]) =>
+      h("label", {class:"opt" + (a === k ? " sel" : "")}, h("input", {type:"radio", name:q.id, id:`${q.id}-${k}`, checked: a === k, disabled: locked, onchange:() => set(k)}), h("span", null, t))));
+  }
+  if (q.type === "multi"){
+    const cur = new Set(a || []);
+    return h("div", {class:"opts"}, h("div", {class:"hint"}, "Можно выбрать несколько вариантов."), q._opts.map(([k, t]) =>
+      h("label", {class:"opt" + (cur.has(k) ? " sel" : "")}, h("input", {type:"checkbox", id:`${q.id}-${k}`, checked: cur.has(k), disabled: locked, onchange:e => { e.target.checked ? cur.add(k) : cur.delete(k); set([...cur]); }}), h("span", null, t))));
+  }
+  if (q.type === "match"){
+    const cur = a || {};
+    return h("div", {class:"match"}, q.items.map(([t], j) => h("div", {class:"mrow"},
+      h("label", {for:`${q.id}-m${j}`}, t),
+      h("select", {id:`${q.id}-m${j}`, disabled: locked, onchange:e => { const v = Object.assign({}, cur); if (e.target.value) v[j] = e.target.value; else delete v[j]; set(v); }},
+        h("option", {value:""}, "— выберите —"), q._choices.map(c => h("option", {value:c, selected: cur[j] === c}, c))))));
+  }
+  if (q.type === "order"){
+    const ord = a, touch = () => { att.touched[q.id] = true; };
+    const move = (pos, d) => { const v = ord.slice(); [v[pos], v[pos + d]] = [v[pos + d], v[pos]]; touch(); set(v); };
+    return h("div", {style:"display:flex;flex-direction:column;gap:8px"},
+      h("div", {class:"hint"}, "Перемещайте строки кнопками ↑ и ↓. " + (q.hint || "Первая строка — самый нижний уровень.")),
+      h("ol", {class:"order"}, ord.map((idx, pos) => h("li", null,
+        h("span", {class:"n"}, pos + 1), h("span", {class:"tx"}, q.items[idx]),
+        h("button", {class:"mv", "aria-label":"Выше", disabled: locked || pos === 0, onclick:() => move(pos, -1)}, "↑"),
+        h("button", {class:"mv", "aria-label":"Ниже", disabled: locked || pos === ord.length - 1, onclick:() => move(pos, 1)}, "↓")))),
+      locked || att.touched[q.id] ? null : h("div", null, h("button", {class:"btn ghost", onclick:() => { touch(); rerender(); }}, "Порядок верный")));
+  }
+  if (q.type === "hotspot") return (q.fig === "adm" ? admFigure : q.fig === "bpmn" ? bpmnFigure : q.fig === "itil" ? itilFigure : q.fig === "prac" ? pracFigure : q.fig === "cloud" ? cloudFigure : q.fig === "risk" ? riskFigure : q.fig === "proc" ? procFigure : q.fig === "ai" ? aiFigure : infraFigure)(a, locked ? null : v => set(v));
+  return h("div");
+}
+
+const ADM_SHORT = {pre:"Подготовка", pa:"A. Видение", pb:"B. Бизнес", pc:"C. Данные, ИС", pd:"D. Технологии", pe:"E. Решения", pf:"F. Миграция", pg:"G. Надзор", ph:"H. Изменения", req:"Требования"};
+function hsZone(s, sel, onPick, id, x, y, w, hh, side, fs, short){
+  const label = ZONES[id];
+  const g = s("g", {class:"hs" + (side ? " side" : "") + (sel === id ? " on" : ""), tabindex: onPick ? "0" : "-1", role:"button", "aria-pressed": sel === id ? "true" : "false", "aria-label": label});
+  g.append(s("rect", {x, y, width:w, height:hh, rx:8}));
+  const t = side ? s("text", {x: x + w / 2, y: y + hh / 2, "text-anchor":"middle", transform:`rotate(-90 ${x + w / 2} ${y + hh / 2})`, "dominant-baseline":"middle"}, label)
+                 : s("text", {x: x + w / 2, y: y + hh / 2 + 5, "text-anchor":"middle"}, short || label);
+  if (fs) t.setAttribute("style", `font-size:${fs}px`);
+  g.append(t);
+  if (onPick){ const pick = () => onPick(id); g.addEventListener("click", pick); g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(); } }); }
+  return g;
+}
+function admFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 400 440", role:"group", "aria-label":"Цикл ADM"});
+  const W = 124, H = 40, cx = 200, cy = 240, rx = 130, ry = 170;
+  const ids = ["pa","pb","pc","pd","pe","pf","pg","ph"];
+  const pts = ids.map((_, i) => { const a = (-90 + 45 * i) * Math.PI / 180; return {x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a)}; });
+  const line = (p, q) => s("line", {x1:p.x, y1:p.y, x2:q.x, y2:q.y, stroke:"var(--line)", "stroke-width":"1.5"});
+  pts.forEach((p, i) => svg.append(line(p, pts[(i + 1) % 8])));
+  pts.forEach(p => svg.append(s("line", {x1:p.x, y1:p.y, x2:cx, y2:cy, stroke:"var(--line)", "stroke-width":"1", "stroke-dasharray":"4 4"})));
+  svg.append(line({x:cx, y:22}, pts[0]));
+  svg.append(hsZone(s, sel, onPick, "pre", cx - 62, 4, 124, 34, false, 15, ADM_SHORT.pre));
+  ids.forEach((id, i) => svg.append(hsZone(s, sel, onPick, id, pts[i].x - W / 2, pts[i].y - H / 2, W, H, false, 15, ADM_SHORT[id])));
+  svg.append(hsZone(s, sel, onPick, "req", cx - 56, cy - 24, 112, 48, false, 15, ADM_SHORT.req));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на фазу на схеме."), h("div", {class:"svgbox"}, svg));
+}
+function bpmnFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 620 296", role:"group", "aria-label":"BPMN-схема процесса выдачи справки", style:"min-width:560px;max-width:none"});
+  const zone = (id, shape, labels) => {
+    const g = s("g", {class:"hs" + (sel === id ? " on" : ""), tabindex: onPick ? "0" : "-1", role:"button", "aria-pressed": sel === id ? "true" : "false", "aria-label": ZONES[id]});
+    g.append(shape); labels.forEach(([x, y, t]) => g.append(s("text", {x, y, "text-anchor":"middle", style:"font-size:14px"}, t)));
+    if (onPick){ const pick = () => onPick(id); g.addEventListener("click", pick); g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(); } }); }
+    return g;
+  };
+  const rect = (x, y, w, hh, rx) => s("rect", {x, y, width:w, height:hh, rx});
+  const L = (d) => s("path", {d, fill:"none", stroke:"var(--muted)", "stroke-width":"1.5"});
+  svg.append(s("rect", {x:4, y:4, width:612, height:288, fill:"none", stroke:"var(--line)"}));
+  svg.append(s("line", {x1:4, y1:104, x2:616, y2:104, stroke:"var(--line)"}));
+  [ "M84 54H100", "M160 76V138", "M220 160H256", "M304 160H340", "M460 160H470", "M530 138V54H576", "M280 184V222", "M220 244H160V182" ].forEach(d => svg.append(L(d)));
+  svg.append(zone("blane1", rect(4, 4, 32, 100, 0), []));
+  svg.append(zone("blane2", rect(4, 104, 32, 188, 0), []));
+  svg.append(s("text", {x:24, y:54, transform:"rotate(-90 24 54)", "text-anchor":"middle", style:"font-size:13px;font-weight:600;fill:var(--fg);pointer-events:none", "dominant-baseline":"middle"}, "Студент"));
+  svg.append(s("text", {x:24, y:198, transform:"rotate(-90 24 198)", "text-anchor":"middle", style:"font-size:13px;font-weight:600;fill:var(--fg);pointer-events:none", "dominant-baseline":"middle"}, "Деканат"));
+  svg.append(zone("bstart", s("circle", {cx:70, cy:54, r:14}), []));
+  svg.append(zone("bt1", rect(100, 32, 120, 44, 10), [[160, 50, "Подать"], [160, 67, "заявление"]]));
+  svg.append(zone("bend", s("circle", {cx:590, cy:54, r:14, "stroke-width":"4"}), []));
+  svg.append(zone("bt2", rect(100, 138, 120, 44, 10), [[160, 156, "Найти"], [160, 173, "личное дело"]]));
+  svg.append(zone("bgw", s("polygon", {points:"256,160 280,136 304,160 280,184"}), []));
+  svg.append(s("text", {x:280, y:126, "text-anchor":"middle", style:"font-size:12px;fill:var(--muted)"}, "Данные актуальны?"));
+  svg.append(zone("bt3", rect(340, 138, 120, 44, 10), [[400, 156, "Набрать справку"], [400, 173, "вручную"]]));
+  svg.append(zone("bt4", rect(470, 138, 120, 44, 10), [[530, 156, "Подписать"], [530, 173, "у декана"]]));
+  svg.append(zone("bt5", rect(220, 222, 120, 44, 10), [[280, 240, "Уточнить данные"], [280, 257, "у студента"]]));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на элемент схемы. На телефоне схему можно прокрутить вбок."), h("div", {class:"svgbox"}, svg));
+}
+const AI_SHORT = {zdes:"Проектирование", zass:"Оценка опасности", zhigh:"Повышенная?", zgen:"Разумные меры", zrisk:"Упр. рисками", zdecl:"Декларация", zuse:"Применение под контролем", zchg:"Изменение"};
+function aiFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 440 330", role:"group", "aria-label":"Оценка опасности системы ИИ"});
+  const L = d => s("path", {d, fill:"none", stroke:"var(--muted)", "stroke-width":"1.5"});
+  ["M140 32H152", "M288 32H300", "M368 56V96", "M330 56V76H220V96", "M368 144V184", "M220 144V272", "M368 232V272", "M152 296H72V144"].forEach(d => svg.append(L(d)));
+  const dash = L("M72 96V82H190V56"); dash.setAttribute("stroke-dasharray", "5 4"); svg.append(dash);
+  svg.append(s("text", {x:374, y:80, style:"font-size:12px;fill:var(--muted)"}, "да"));
+  svg.append(s("text", {x:232, y:72, style:"font-size:12px;fill:var(--muted)"}, "нет"));
+  const z = (id, x, y, w) => svg.append(hsZone(s, sel, onPick, id, x, y, w, 48, false, 12.5, AI_SHORT[id]));
+  z("zdes", 4, 8, 136); z("zass", 152, 8, 136); z("zhigh", 300, 8, 136);
+  z("zchg", 4, 96, 136); z("zgen", 152, 96, 136); z("zrisk", 300, 96, 136);
+  z("zdecl", 300, 184, 136); z("zuse", 152, 272, 284);
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на этап схемы (рис. 9.1)."), h("div", {class:"svgbox"}, svg));
+}
+const PROC_SHORT = {zneed:"Потребность", zplan:"План закупок", ztz:"ТЗ", zmeth:"Выбор метода", zann:"Объявление", zeval:"Оценка", zcont:"Договор", zacc:"Приёмка", zman:"Упр. договором"};
+function procFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 440 250", role:"group", "aria-label":"Жизненный цикл ИТ-закупки"});
+  const X = [4, 152, 300], Y = [36, 106, 176], W = 136, H = 50;
+  const L = d => s("path", {d, fill:"none", stroke:"var(--muted)", "stroke-width":"1.5"});
+  X.forEach(x => { svg.append(L(`M${x + W / 2} ${Y[0] + H}V${Y[1]}`)); svg.append(L(`M${x + W / 2} ${Y[1] + H}V${Y[2]}`)); });
+  svg.append(L(`M${X[0] + W} ${Y[2] + H / 2}H146V${Y[0] + H / 2}H${X[1]}`));
+  svg.append(L(`M${X[1] + W} ${Y[2] + H / 2}H294V${Y[0] + H / 2}H${X[2]}`));
+  ["Подготовка", "Процедура", "Исполнение"].forEach((t, i) => svg.append(s("text", {x: X[i] + W / 2, y: 22, "text-anchor":"middle", style:"font-size:14px;fill:var(--muted);font-weight:600"}, t)));
+  const ids = [["zneed","zplan","ztz"],["zmeth","zann","zeval"],["zcont","zacc","zman"]];
+  ids.forEach((col, i) => col.forEach((id, j) => svg.append(hsZone(s, sel, onPick, id, X[i], Y[j], W, H, false, 15, PROC_SHORT[id]))));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на этап схемы (рис. 8.1)."), h("div", {class:"svgbox"}, svg));
+}
+const RISK_SHORT = {rctx:"Контекст и критерии", rid:"Идентификация", ran:"Анализ", rev:"Сравнительная оценка", rtr:"Обработка риска", rcomm:"Коммуникация", rmon:"Мониторинг", rrec:"Запись и отчётность"};
+function riskFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 440 400", role:"group", "aria-label":"Процесс менеджмента риска ISO 31000"});
+  const L = d => s("path", {d, fill:"none", stroke:"var(--muted)", "stroke-width":"1.5"});
+  ["M220 50V68", "M220 132V144", "M220 188V200", "M220 268V280"].forEach(d => svg.append(L(d)));
+  svg.append(s("rect", {x:110, y:68, width:220, height:200, rx:10, fill:"none", stroke:"var(--line)", "stroke-dasharray":"5 4"}));
+  svg.append(s("text", {x:122, y:86, style:"font-size:12px;fill:var(--muted);font-weight:600"}, "Оценка риска"));
+  svg.append(hsZone(s, sel, onPick, "rcomm", 4, 4, 94, 316, true, 14, RISK_SHORT.rcomm));
+  svg.append(hsZone(s, sel, onPick, "rmon", 342, 4, 94, 316, true, 14, RISK_SHORT.rmon));
+  svg.append(hsZone(s, sel, onPick, "rctx", 120, 4, 200, 46, false, 13, RISK_SHORT.rctx));
+  svg.append(hsZone(s, sel, onPick, "rid", 130, 96, 180, 36, false, 13, RISK_SHORT.rid));
+  svg.append(hsZone(s, sel, onPick, "ran", 130, 144, 180, 44, false, 13, RISK_SHORT.ran));
+  svg.append(hsZone(s, sel, onPick, "rev", 130, 200, 180, 44, false, 13, RISK_SHORT.rev));
+  svg.append(hsZone(s, sel, onPick, "rtr", 120, 280, 200, 40, false, 13, RISK_SHORT.rtr));
+  svg.append(hsZone(s, sel, onPick, "rrec", 4, 332, 432, 50, false, 13, RISK_SHORT.rrec));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на элемент схемы (рис. 7.1)."), h("div", {class:"svgbox"}, svg));
+}
+function cloudFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 600 340", role:"group", "aria-label":"Разделение ответственности в облачных моделях", style:"min-width:520px;max-width:none"});
+  const rows = ["Данные и доступ","Приложения","Среда выполнения","Операционная система","Виртуализация","Серверы и хранение","Сеть и ЦОД"];
+  const cols = [["cown","Свой ЦОД",0],["ciaas","IaaS",3],["cpaas","PaaS",5],["csaas","SaaS",6]];
+  rows.forEach((r, i) => svg.append(s("text", {x:150, y:62 + i * 36, "text-anchor":"end", style:"font-size:13px;fill:var(--fg)"}, r)));
+  cols.forEach(([id, name, prov], c) => {
+    const x = 162 + c * 108;
+    const g = s("g", {class:"hs" + (sel === id ? " on" : ""), tabindex: onPick ? "0" : "-1", role:"button", "aria-pressed": sel === id ? "true" : "false", "aria-label": ZONES[id]});
+    g.append(s("rect", {x: x - 4, y: 8, width: 104, height: 292, rx: 8}));
+    g.append(s("text", {x: x + 48, y: 30, "text-anchor":"middle", style:"font-size:14px"}, name));
+    rows.forEach((_, i) => { const p = i >= 7 - prov; g.append(s("rect", {x, y: 42 + i * 36, width: 96, height: 30, rx: 5, style: p ? "fill:var(--bg);stroke:var(--line);stroke-width:1" : "fill:var(--accent-soft);stroke:var(--accent);stroke-width:1"})); });
+    if (onPick){ const pick = () => onPick(id); g.addEventListener("click", pick); g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(); } }); }
+    svg.append(g);
+  });
+  svg.append(s("rect", {x:162, y:312, width:16, height:16, rx:4, style:"fill:var(--accent-soft);stroke:var(--accent)"}));
+  svg.append(s("text", {x:184, y:325, style:"font-size:12px;fill:var(--fg)"}, "организация"));
+  svg.append(s("rect", {x:300, y:312, width:16, height:16, rx:4, style:"fill:var(--bg);stroke:var(--line)"}));
+  svg.append(s("text", {x:322, y:325, style:"font-size:12px;fill:var(--fg)"}, "поставщик"));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на столбец модели (рис. 6.2). На телефоне схему можно прокрутить вбок."), h("div", {class:"svgbox"}, svg));
+}
+const PRAC_SHORT = {puser:"Пользователь", pdesk:"Служба поддержки", preq:"Запрос", pful:"Выполнение", pinc:"Инцидент", pres:"Восстановление", pprob:"Проблема", pke:"Известная ошибка", pchg:"Изменение"};
+function pracFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 620 340", role:"group", "aria-label":"Связь практик управления услугами", style:"min-width:560px;max-width:none"});
+  const W = 136, H = 40, P = {puser:[78,110], pdesk:[226,110], preq:[384,50], pful:[540,50], pinc:[384,170], pres:[540,170], pprob:[384,260], pke:[540,260], pchg:[540,316]};
+  const L = (d, dash) => s("path", {d, fill:"none", stroke:"var(--muted)", "stroke-width":"1.5", "stroke-dasharray": dash ? "4 4" : "none"});
+  ["M146 110H158", "M294 110H304V50H316", "M304 110V170H316", "M452 50H472", "M452 170H472", "M384 190V240", "M452 260H472", "M540 280V296"].forEach(d => svg.append(L(d)));
+  svg.append(L("M540 240V190", true));
+  Object.entries(P).forEach(([id, [x, y]]) => svg.append(hsZone(s, sel, onPick, id, x - W / 2, y - (id === "pchg" ? 16 : H / 2), W, id === "pchg" ? 32 : H, false, 12, PRAC_SHORT[id])));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на элемент схемы (рис. 5.1). На телефоне схему можно прокрутить вбок."), h("div", {class:"svgbox"}, svg));
+}
+const ITIL_SHORT = {idisc:"Исследование", ides:"Проектирование", iacq:"Приобретение", ibld:"Создание", itrn:"Переход", iopr:"Эксплуатация", idlv:"Предоставление", isup:"Поддержка", ivs:"Система ценности"};
+function itilFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 460 460", role:"group", "aria-label":"Жизненный цикл продукта и услуги ITIL (Version 5)"});
+  const W = 124, H = 40, cx = 230, cy = 230, rx = 160, ry = 190;
+  const ids = ["idisc","ides","iacq","ibld","itrn","iopr","idlv","isup"];
+  const pts = ids.map((_, i) => { const a = (-90 + 45 * i) * Math.PI / 180; return {x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a)}; });
+  pts.forEach((p, i) => { const q2 = pts[(i + 1) % 8]; svg.append(s("line", {x1:p.x, y1:p.y, x2:q2.x, y2:q2.y, stroke:"var(--line)", "stroke-width":"1.5"})); });
+  ids.forEach((id, i) => svg.append(hsZone(s, sel, onPick, id, pts[i].x - W / 2, pts[i].y - H / 2, W, H, false, 13, ITIL_SHORT[id])));
+  svg.append(hsZone(s, sel, onPick, "ivs", cx - 68, cy - 24, 136, 48, false, 13, ITIL_SHORT.ivs));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на элемент схемы. Цикл идёт по часовой стрелке от «Исследования»."), h("div", {class:"svgbox"}, svg));
+}
+function infraFigure(sel, onPick){
+  const NS = "http://www.w3.org/2000/svg";
+  const s = (tag, at, ...kids) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at || {})) e.setAttribute(k, v); kids.forEach(k => e.append(k.nodeType ? k : document.createTextNode(k))); return e; };
+  const svg = s("svg", {viewBox:"0 0 480 440", role:"group", "aria-label":"Уровни ИТ-инфраструктуры"});
+  const layers = ["biz","svc","app","data","plat","net","hw","fac"];
+  const zone = (id, x, y, w, hh, side) => {
+    const label = ZONES[id];
+    const g = s("g", {class:"hs" + (side ? " side" : "") + (sel === id ? " on" : ""), tabindex: onPick ? "0" : "-1", role:"button", "aria-pressed": sel === id ? "true" : "false", "aria-label": label});
+    g.append(s("rect", {x, y, width:w, height:hh, rx:8}));
+    g.append(side ? s("text", {x: x + w / 2, y: y + hh / 2, "text-anchor":"middle", transform:`rotate(-90 ${x + w / 2} ${y + hh / 2})`, "dominant-baseline":"middle"}, label)
+                  : s("text", {x: x + 16, y: y + hh / 2 + 6}, label));
+    if (onPick){ const pick = () => onPick(id); g.addEventListener("click", pick); g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(); } }); }
+    return g;
+  };
+  svg.append(zone("ppl", 4, 4, 52, 432, true));
+  layers.forEach((id, i) => svg.append(zone(id, 66, 4 + i * 54, 348, 46)));
+  svg.append(zone("sec", 424, 4, 52, 432, true));
+  return h("div", null, h("div", {class:"hint", style:"margin-bottom:8px"}, sel ? `Выбрано: ${ZONES[sel]}.` : "Нажмите на элемент схемы."), h("div", {class:"svgbox"}, svg));
+}
+
+async function finish(force){
+  leaveQ();
+  const left = att.qs.filter(q => !answered(q)).length;
+  if (left && force !== true){
+    const first = att.qs.findIndex(q => !answered(q));
+    app.prepend(h("div", {class:"card", role:"alert"},
+      h("p", null, `Не готово заданий: ${left} (нет ответа или отметки уверенности). Пропущенные задания засчитываются как неверные.`),
+      h("div", {class:"row"}, h("button", {class:"btn ghost", onclick:() => go(first)}, `Перейти к заданию ${first + 1}`),
+        h("button", {class:"btn", onclick:() => finish(true)}, "Завершить всё равно"))));
+    window.scrollTo(0, 0); att.tId = att.qs[att.i].id; att.tShown = Date.now(); return;
+  }
+  att.items = {}; att.cbm = 0;
+  att.qs.forEach(q => { const f = Math.round(grade(q, hasAnswer(q) ? att.ans[q.id] : null) * 100) / 100; att.items[q.id] = f; att.cbm += cbmPoints(f, att.conf[q.id]); });
+  att.score = pct(mean(Object.values(att.items)));
+  att.cbmAvg = att.cbm / att.qs.length;
+  att.done = true;
+  const last = store.get("trainer-last") || {}; last[att.ch] = att.score; store.set("trainer-last", last);
+  att.cfg = await getConfig(att.ch);
+  render();
+  att.saved = await saveAttempt();
+  if (route() === `ch${att.ch}` && att.done) render();
+}
+
+function downloadLocalResult(){
+  const lines = ["Тренажёр «Управление ИТ-инфраструктурой и ИТ-сервисами предприятия»",
+    "Глава: " + att.ch, "Дата: " + new Date().toLocaleString("ru-RU"),
+    "Вуз: " + (att.uni || "—"), "Группа: " + (att.group || "—"), "Режим: " + (MODES[att.mode] || att.mode),
+    "Результат: " + att.score + "%", "Средний балл уверенности: " + (Math.round(att.cbmAvg * 100) / 100), "",
+    "По заданиям (доля верного ответа):"];
+  att.qs.forEach((q, k) => lines.push((k + 1) + ". [" + q.id + ", РО " + q.ro + "] " + att.items[q.id]));
+  const blob = new Blob(["\ufeff" + lines.join("\r\n")], {type:"text/plain;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "result_ch" + att.ch + "_" + (att.group || "group").replace(/[^\wа-яА-ЯёЁ-]+/g, "_") + ".txt";
+  document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+async function saveAttempt(){
+  await capsReady;
+  if (!db || !uid) return {ok:false, local:true, msg:"Результат сохранён только на этом устройстве. Чтобы сдать тест, скачайте файл с результатом и отправьте его преподавателю (или покажите этот экран)."};
+  const resp = {}, conf = {}, time = {};
+  att.qs.forEach(q => { if (hasAnswer(q)) resp[q.id] = att.ans[q.id]; if (att.conf[q.id]) conf[q.id] = att.conf[q.id]; time[q.id] = Math.round(att.time[q.id] || 0); });
+  const t = {ch: att.ch, at: new Date().toISOString(), mode: att.mode, uni: att.uni, group: att.group, score: att.score,
+    cbm: Math.round(att.cbmAvg * 100) / 100, qids: att.qs.map(q => q.id), items: att.items, resp, conf, time};
+  try {
+    const ref = db.doc("attempts/" + uid);
+    const snap = await withTimeout(ref.get(), 10000);
+    const tries = (snap.exists && Array.isArray(snap.data().tries)) ? snap.data().tries.slice(-199) : [];
+    tries.push(t);
+    await withTimeout(ref.set({uni: att.uni, group: att.group, tries}), 10000);
+    return {ok:true, msg:"Результат сохранён: преподаватель увидит его в аналитике."};
+  } catch(e){
+    const c = e && e.code;
+    return {ok:false, msg: (c === "permission_denied" || c === "not_granted") ? "Результат не сохранён: нет доступа на запись. Попросите преподавателя открыть доступ к тренажёру." : "Результат не сохранён из-за ошибки связи. Пройдите тест ещё раз позже, чтобы он попал в аналитику."};
+  }
+}
+
+/* ---------- shared blocks ---------- */
+function barRow(label, code, v, extra){
+  return h("div", {class:"barrow"}, h("div", {class:"lab"}, code ? h("b", null, code) : null, label),
+    h("div", {class:"track"}, h("div", {class:"fill", style:`width:${Math.max(0, Math.min(100, pct(v)))}%`})), h("div", {class:"pct"}, extra || `${pct(v)}%`));
+}
+function quadBlock(qd, total){
+  const cell = (cls, n, t) => h("div", {class:"cell " + cls}, h("strong", null, total ? `${pct(n / total)}%` : "—"), h("span", null, `${t} · ${n}`));
+  return h("div", {class:"quad"},
+    h("div"), h("div", {class:"hd"}, "Уверенно (2–3)"), h("div", {class:"hd"}, "Неуверенно (1)"),
+    h("div", {class:"hd", style:"align-self:center"}, "Верно"), cell("q-cc", qd.cc, "прочное знание"), cell("q-uc", qd.uc, "хрупкое знание, догадка"),
+    h("div", {class:"hd", style:"align-self:center"}, "Неверно"), cell("q-cw", qd.cw, "ложное представление"), cell("q-uw", qd.uw, "осознанный пробел"));
+}
+function emptyQuad(){ return {cc:0, uc:0, cw:0, uw:0, cal:{1:[0,0], 2:[0,0], 3:[0,0]}}; }
+function addQuad(qd, f, c){
+  if (!c) return; const ok = f === 1;
+  if (c >= 2) ok ? qd.cc++ : qd.cw++; else ok ? qd.uc++ : qd.uw++;
+  qd.cal[c][0]++; if (ok) qd.cal[c][1]++;
+}
+function calibration(qd){
+  return h("div", {class:"bars"}, [1,2,3].map(c => { const [n, ok] = qd.cal[c];
+    return barRow(`${CONF[c]} (${c})`, null, n ? ok / n : 0, n ? `${pct(ok / n)}%` : "—"); }),
+    h("div", {class:"ideal"}, "Хорошая калибровка: «не уверен» — до 67% верных, «скорее уверен» — 67–80%, «уверен» — выше 80%."));
+}
+
+function viewResult(){
+  const ch = att.ch, pass = (att.cfg || {pass: DEFAULT_PASS}).pass, ok = att.score >= pass;
+  const grp = (key) => { const m = {}; att.qs.forEach(q => { const k = q[key]; (m[k] = m[k] || {s:0, n:0}); m[k].s += att.items[q.id]; m[k].n++; }); return m; };
+  const byRo = grp("ro"), byBl = grp("bloom");
+  const qd = emptyQuad(); att.qs.forEach(q => addQuad(qd, att.items[q.id], att.conf[q.id]));
+  const nconf = qd.cc + qd.uc + qd.cw + qd.uw;
+  app.append(
+    h("div", {class:"eyebrow"}, `Глава ${ch} · ${MODES[att.mode]} · результат`),
+    h("div", {class:"card"},
+      h("div", {class:"score"}, h("div", {class:"big"}, `${att.score}%`),
+        h("div", {style:"display:flex;flex-direction:column;gap:8px"}, h("span", {class:"verdict " + (ok ? "ok" : "no")}, ok ? "Тест пройден" : `Проходной балл ${pass}% не достигнут`),
+          h("span", {class:"hint"}, `Балл уверенности: ${fmt1(att.cbmAvg)} из 3 на задание · ${att.qs.length} заданий`))),
+      att.saved ? h("div", {class:"note" + (att.saved.ok ? " ok" : "")}, att.saved.msg, att.saved.local ? h("div", {class:"row", style:"margin-top:10px"}, h("button", {class:"btn", onclick:downloadLocalResult}, "Скачать результат")) : null) : h("div", {class:"note"}, "Сохраняем результат…")),
+    h("div", {class:"card"}, h("h2", null, "Уверенность и знание"),
+      h("p", {class:"hint"}, "Начните повторение с уверенных ошибок: это ложные представления. Хрупкие знания закрепите, перечитав соответствующий раздел."),
+      quadBlock(qd, nconf), h("h3", null, "Калибровка: доля верных ответов при каждом уровне уверенности"), calibration(qd)),
+    h("div", {class:"card"}, h("h2", null, "По результатам обучения"), h("p", {class:"hint"}, "Ниже 70% — повторите раздел главы, к которому относится РО."),
+      h("div", {class:"bars"}, Object.keys(RO).filter(k => byRo[k]).map(k => barRow(RO[k], `РО ${k}`, byRo[k].s / byRo[k].n)))),
+    h("div", {class:"card"}, h("h2", null, "По уровням таксономии Блума"),
+      h("p", {class:"hint"}, "Провал на верхних уровнях при хороших нижних означает, что материал выучен, но ещё не применяется."),
+      h("div", {class:"bars"}, [1,2,3,4,5,6].filter(b => byBl[b]).map(b => barRow(BLOOM[b], String(b), byBl[b].s / byBl[b].n)))),
+    h("div", {class:"card"}, h("h2", null, "Разбор заданий"),
+      h("div", {class:"review"}, att.qs.map((q, k) => { const v = att.items[q.id], c = att.conf[q.id], cls = v === 1 ? "g" : v > 0 ? "p" : "b", pts = cbmPoints(v, c);
+        return h("div", {class:"rv " + cls},
+          h("div", {class:"head"}, h("span", {class:"mark"}, v === 1 ? "Верно" : v > 0 ? `Частично · ${pct(v)}%` : "Неверно"),
+            h("span", {class:"tag"}, `№${k + 1} · РО ${q.ro}`), bloomTag(q.bloom),
+            h("span", {class:"tag"}, c ? `${CONF[c]} · ${pts > 0 ? "+" : ""}${pts}` : "без отметки"),
+            (v < 1 && c >= 2) ? h("span", {class:"flag cw"}, "уверенная ошибка") : null),
+          h("div", null, q.q), h("div", {class:"why"}, q.why)); }))),
+    h("div", {class:"row"}, h("a", {class:"btn ghost", href:"#", style:"text-decoration:none"}, "К списку глав"), h("span", {class:"spacer"}),
+      h("button", {class:"btn", onclick:() => { att = null; render(); }}, "Пройти ещё раз"))
+  );
+}
+
+/* ---------- teacher analytics ---------- */
+const an = {ch:1, mode:"all", uni:"all", group:"all", docs:null, names:{}};
+async function loadAll(force){
+  if (an.docs && !force) return an.docs;
+  const snap = await withTimeout(db.collection("attempts").get(), 10000);
+  an.docs = snap.docs.map(d => ({id: d.id, data: d.data() || {}}));
+  try { const ids = an.docs.map(d => d.id); if (ids.length && user) an.names = await user.profiles(ids); } catch(e){}
+  return an.docs;
+}
+async function viewAnalytics(){
+  app.append(h("div", {class:"eyebrow"}, "Для преподавателя"), h("h1", null, "Аналитика тестов"));
+  const box = h("div", {class:"wrap", style:"gap:20px"}, h("div", {class:"note"}, "Загружаем результаты…"));
+  app.append(box);
+  await capsReady;
+  if (!isTeacher || !db){ box.textContent = ""; box.append(h("div", {class:"note"}, "Аналитика доступна владельцу и редакторам тренажёра, вошедшим в claude.ai.")); return; }
+  try { await loadAll(false); } catch(e){ box.textContent = ""; box.append(h("div", {class:"note"}, "Не удалось загрузить результаты. Обновите страницу.")); return; }
+  const cfg = await getConfig(an.ch);
+  drawAnalytics(box, cfg);
+}
+
+function drawAnalytics(box, cfg){
+  box.textContent = "";
+  const ch = an.ch, bank = BANK[ch], pass = cfg.pass;
+  /* all tries of the chapter, then filters */
+  const all = [];
+  an.docs.forEach(d => (d.data.tries || []).forEach(t => { if (t.ch === ch) all.push(Object.assign({sid: d.id}, t)); }));
+  const unis = [...new Set(all.map(t => t.uni).filter(Boolean))], groups = [...new Set(all.filter(t => an.uni === "all" || t.uni === an.uni).map(t => t.group).filter(Boolean))].sort();
+  const sel = (id, label, val, opts, onch) => h("div", {class:"field"}, h("label", {for:id}, label),
+    h("select", {id, onchange:e => { onch(e.target.value); }}, opts.map(([v, t]) => h("option", {value:v, selected: val === v}, t))));
+  box.append(h("div", {class:"card"}, h("div", {class:"filters"},
+    sel("f-ch", "Глава", String(ch), CHAPTERS.filter(c => BANK[c.n]).map(c => [String(c.n), `${c.n}. ${c.t}`]), v => { an.ch = +v; getConfig(an.ch).then(c => drawAnalytics(box, c)); }),
+    sel("f-mode", "Режим", an.mode, [["all","Все режимы"], ["control","Контроль"], ["train","Тренировка"]], v => { an.mode = v; drawAnalytics(box, cfg); }),
+    sel("f-uni", "Вуз", an.uni, [["all","Все вузы"], ...unis.map(u => [u, u])], v => { an.uni = v; an.group = "all"; drawAnalytics(box, cfg); }),
+    sel("f-grp", "Группа", an.group, [["all","Все группы"], ...groups.map(g => [g, g])], v => { an.group = v; drawAnalytics(box, cfg); })),
+    h("div", {class:"row"}, h("span", {class:"hint"}, "Статистика заданий считается по первой попытке каждого студента в выбранном режиме: повторные попытки её не искажают."), h("span", {class:"spacer"}),
+      h("button", {class:"btn ghost", onclick: async () => { box.textContent = ""; box.append(h("div", {class:"note"}, "Обновляем…")); try { await loadAll(true); } catch(e){} drawAnalytics(box, cfg); }}, "Обновить"),
+      h("button", {class:"btn ghost", onclick:() => exportCsv(ch, filtered)}, "Выгрузить CSV"))));
+  const filtered = all.filter(t => (an.mode === "all" || t.mode === an.mode) && (an.uni === "all" || t.uni === an.uni) && (an.group === "all" || t.group === an.group));
+  const bySid = {}; filtered.forEach(t => (bySid[t.sid] = bySid[t.sid] || []).push(t));
+  Object.values(bySid).forEach(a => a.sort((x, y) => x.at < y.at ? -1 : 1));
+  const first = Object.values(bySid).map(a => a[0]);
+  const N = first.length;
+  if (!N){
+    box.append(h("div", {class:"card"}, h("h3", null, "Нет попыток по выбранным условиям"),
+      h("p", {class:"hint"}, "Здесь появятся результаты студентов, прошедших тест, войдя в claude.ai. Поделитесь тренажёром с правом «Участник» (Contributor) и раздайте QR-код из главы.")));
+    box.append(angoffCard(ch, cfg, null, box));
+    return;
+  }
+  /* item matrix */
+  const qs = bank, X = first.map(t => qs.map(q => t.items && t.items[q.id] != null ? t.items[q.id] : null));
+  const complete = X.filter(r => r.every(v => v != null));
+  const totals = X.map(r => r.reduce((s, v) => s + (v || 0), 0));
+  const itemStats = qs.map((q, j) => {
+    const rows = X.map((r, i) => [r[j], totals[i] - (r[j] || 0)]).filter(p => p[0] != null);
+    const p = rows.length ? mean(rows.map(r => r[0])) : null;
+    const d = pearson(rows.map(r => r[0]), rows.map(r => r[1]));
+    let cw = 0, nc = 0; const times = [];
+    first.forEach(t => { const c = t.conf && t.conf[q.id], f = t.items && t.items[q.id]; if (c){ nc++; if (c >= 2 && f !== 1) cw++; } if (t.time && t.time[q.id] != null) times.push(t.time[q.id]); });
+    return {q, j, n: rows.length, p, d, cw: nc ? cw / nc : 0, tmed: median(times), fast: times.filter(x => x < 5).length};
+  });
+  let alpha = null;
+  if (complete.length >= 3){
+    const k = qs.length, iv = qs.map((_, j) => variance(complete.map(r => r[j]))), tv = variance(complete.map(r => r.reduce((s, v) => s + v, 0)));
+    alpha = tv ? (k / (k - 1)) * (1 - iv.reduce((s, x) => s + x, 0) / tv) : null;
+  }
+  const avgScore = mean(first.map(t => t.score)), passed = first.filter(t => t.score >= pass).length, avgCbm = mean(first.map(t => t.cbm || 0));
+  const qd = emptyQuad(); first.forEach(t => qs.forEach(q => addQuad(qd, t.items ? t.items[q.id] : 0, t.conf ? t.conf[q.id] : null)));
+  const nconf = qd.cc + qd.uc + qd.cw + qd.uw;
+  const agg = key => { const m = {}; itemStats.forEach(s => { if (s.p == null) return; const k = s.q[key]; (m[k] = m[k] || {s:0, n:0}); m[k].s += s.p; m[k].n++; }); return m; };
+  const byRo = agg("ro"), byBl = agg("bloom");
+  const alphaTxt = alpha == null ? "недостаточно данных" : alpha >= .8 ? "достаточно для итогового контроля" : alpha >= .7 ? "достаточно для текущего контроля" : "низкая: пересмотрите слабые задания";
+  box.append(...[
+    h("div", {class:"kpis"},
+      h("div", {class:"kpi"}, h("strong", null, String(N)), h("span", null, "студентов")),
+      h("div", {class:"kpi"}, h("strong", null, `${Math.round(avgScore)}%`), h("span", null, "средний результат первой попытки")),
+      h("div", {class:"kpi"}, h("strong", null, `${passed} / ${N}`), h("span", null, `набрали проходной балл ${pass}%`)),
+      h("div", {class:"kpi"}, h("strong", null, fmt1(avgCbm)), h("span", null, "средний балл уверенности, из 3")),
+      h("div", {class:"kpi" + (alpha != null && alpha < .7 ? " warn" : "")}, h("strong", null, fmt2(alpha)), h("span", null, `надёжность (альфа Кронбаха): ${alphaTxt}`))),
+    N < 30 ? h("div", {class:"note"}, `Студентов пока ${N}. Показатели трудности, различающей способности и надёжности становятся устойчивыми примерно от 30 человек; сейчас считайте их предварительными.`) : null,
+    h("div", {class:"card"}, h("h2", null, "Освоение результатов обучения"), h("div", {class:"bars"}, Object.keys(RO).filter(k => byRo[k]).map(k => barRow(RO[k], `РО ${k}`, byRo[k].s / byRo[k].n)))),
+    h("div", {class:"card"}, h("h2", null, "По уровням Блума"), h("div", {class:"bars"}, [1,2,3,4,5,6].filter(b => byBl[b]).map(b => barRow(BLOOM[b], String(b), byBl[b].s / byBl[b].n)))),
+    h("div", {class:"card"}, h("h2", null, "Уверенность группы"),
+      h("p", {class:"hint"}, "Уверенные ошибки — ложные представления, общие для группы. Их стоит разобрать на занятии в первую очередь."),
+      quadBlock(qd, nconf), h("h3", null, "Калибровка группы"), calibration(qd)),
+    itemCard(itemStats, first),
+    studentsCard(bySid, pass),
+    angoffCard(ch, cfg, itemStats, box)
+  ].filter(Boolean));
+}
+
+function itemCard(stats, first){
+  const flags = s => { const f = [];
+    if (s.p != null && s.p > .9) f.push(["easy", "лёгкое"]); if (s.p != null && s.p < .3) f.push(["hard", "трудное"]);
+    if (s.d != null && s.d < 0) f.push(["key", "проверьте ключ"]); else if (s.d != null && s.d < .2) f.push(["lowd", "слабо различает"]);
+    if (s.cw > .3) f.push(["cw", "ложное представление"]);
+    if (!f.length) f.push(["okk", "норма"]); return h("div", {class:"flags"}, f.map(([c, t]) => h("span", {class:"flag " + c}, t))); };
+  return h("div", {class:"card"}, h("h2", null, "Качество заданий"),
+    h("p", {class:"hint"}, "Трудность — средний балл за задание (норма 0,30–0,90). Различающая способность — корреляция задания с остальным тестом: от 0,30 хорошо, ниже 0,20 задание стоит переработать, отрицательная почти всегда означает ошибку в ключе. «Уверенные ошибки» — доля ответов, данных с уверенностью 2–3 и оказавшихся неверными."),
+    h("div", {class:"tbl"}, h("table", null,
+      h("thead", null, h("tr", null, h("th", null, "№"), h("th", null, "Тип · РО · Блум"), h("th", {class:"num"}, "Трудн."), h("th", {class:"num"}, "Различ."), h("th", {class:"num"}, "Увер. ош."), h("th", {class:"num"}, "Время, с"), h("th", null, "Оценка"))),
+      h("tbody", null, stats.map(s => h("tr", null, h("td", null, s.j + 1), h("td", null, `${TYPES[s.q.type]} · ${s.q.ro} · ${s.q.bloom}`),
+        h("td", {class:"num"}, fmt2(s.p)), h("td", {class:"num"}, fmt2(s.d)), h("td", {class:"num"}, `${pct(s.cw)}%`),
+        h("td", {class:"num"}, s.tmed == null ? "—" : Math.round(s.tmed) + (s.fast ? ` (${s.fast} < 5 с)` : "")), h("td", null, flags(s))))))),
+    h("h3", null, "Анализ вариантов ответа"),
+    h("p", {class:"hint"}, "Какие варианты выбирают студенты. Неверный вариант, который выбирают меньше 5%, не работает: замените его правдоподобным."),
+    stats.map(s => distractors(s, first)));
+}
+
+function distractors(s, first){
+  const q = s.q, resp = first.map(t => t.resp ? t.resp[q.id] : undefined).filter(v => v !== undefined), n = resp.length;
+  const body = h("div", {class:"dist"});
+  if (!n) body.append(h("div", {class:"hint"}, "Нет сохранённых ответов."));
+  else if (q.type === "single" || q.type === "case" || q.type === "multi"){
+    const isOk = k => q.type === "multi" ? q.correct.includes(k) : q.correct === k;
+    q.opts.forEach(([k, t]) => { const c = resp.filter(r => Array.isArray(r) ? r.includes(k) : r === k).length, share = c / n;
+      body.append(barRow(h("span", {class: isOk(k) ? "ok" : share < .05 ? "dead" : null}, (isOk(k) ? "✓ " : share < .05 ? "не работает · " : "") + t), null, share)); });
+  } else if (q.type === "hotspot"){
+    const cnt = {}; resp.forEach(r => cnt[r] = (cnt[r] || 0) + 1);
+    (FIGZONES[q.fig || "infra"]).filter(z => cnt[z] || z === q.correct).forEach(z => body.append(barRow(h("span", {class: z === q.correct ? "ok" : null}, (z === q.correct ? "✓ " : "") + ZONES[z]), null, (cnt[z] || 0) / n)));
+  } else if (q.type === "match"){
+    q.items.forEach(([t, a], j) => { const wrong = {}; let ok = 0; resp.forEach(r => { const v = r && r[j]; if (v === a) ok++; else if (v) wrong[v] = (wrong[v] || 0) + 1; });
+      const top = Object.entries(wrong).sort((x, y) => y[1] - x[1])[0];
+      body.append(barRow(`${t} → ${a}` + (top ? ` · чаще всего путают с «${top[0]}» (${pct(top[1] / n)}%)` : ""), null, ok / n)); });
+  } else if (q.type === "order"){
+    const full = resp.filter(r => Array.isArray(r) && r.every((v, pos) => v === pos)).length;
+    body.append(barRow("Полностью верная последовательность", null, full / n));
+    q.items.forEach((t, idx) => { const okPos = resp.filter(r => Array.isArray(r) && r[idx] === idx).length; body.append(barRow(`На своём месте: ${t}`, null, okPos / n)); });
+  }
+  return h("details", null, h("summary", null, `№${s.j + 1}. ${q.q.length > 90 ? q.q.slice(0, 90) + "…" : q.q}`), body);
+}
+
+function studentsCard(bySid, pass){
+  const rows = Object.entries(bySid).map(([sid, tr]) => ({sid, tr, name: (an.names[sid] && an.names[sid].name) || "Студент", best: Math.max(...tr.map(t => t.score)), last: tr[tr.length - 1]}))
+    .sort((a, b) => a.name.localeCompare(b.name, "ru"));
+  return h("div", {class:"card"}, h("h2", null, "Студенты"),
+    h("div", {class:"tbl"}, h("table", null,
+      h("thead", null, h("tr", null, h("th", null, "Студент"), h("th", null, "Вуз · группа"), h("th", {class:"num"}, "Попыток"), h("th", {class:"num"}, "Первая"), h("th", {class:"num"}, "Лучшая"), h("th", {class:"num"}, "Уверенность"), h("th", null, "Последняя"))),
+      h("tbody", null, rows.map(r => h("tr", null, h("td", null, r.name), h("td", null, [r.last.uni, r.last.group].filter(Boolean).join(" · ") || "—"),
+        h("td", {class:"num"}, r.tr.length), h("td", {class:"num"}, r.tr[0].score + "%"), h("td", {class:"num"}, h("span", {class: r.best >= pass ? null : "dead"}, r.best + "%")),
+        h("td", {class:"num"}, fmt1(r.tr[0].cbm || 0)), h("td", null, new Date(r.last.at).toLocaleString("ru-RU", {dateStyle:"short", timeStyle:"short"}))))))));
+}
+
+function angoffCard(ch, cfg, stats, box){
+  const qs = BANK[ch], vals = Object.assign({}, cfg.angoff || {});
+  const out = h("strong", {style:"font-family:var(--mono)"});
+  const calc = () => { const v = qs.map(q => vals[q.id]).filter(x => typeof x === "number"); out.textContent = v.length === qs.length ? `${Math.round(mean(v))}%` : `заполнено ${v.length} из ${qs.length}`; return v.length === qs.length ? Math.round(mean(v)) : null; };
+  const status = h("span", {class:"hint"});
+  const list = h("div", {class:"ang"}, qs.map((q, j) => h("div", {class:"r"}, h("span", {class:"tag"}, j + 1), h("span", null, q.q.length > 110 ? q.q.slice(0, 110) + "…" : q.q),
+    h("input", {type:"number", min:"0", max:"100", step:"5", id:`ang-${q.id}`, value: vals[q.id] != null ? vals[q.id] : "", "aria-label":`Задание ${j + 1}, ожидаемый процент`, oninput:e => { const x = parseFloat(e.target.value); if (isNaN(x)) delete vals[q.id]; else vals[q.id] = Math.max(0, Math.min(100, x)); calc(); }}))));
+  calc();
+  return h("details", {class:"card", style:"padding:16px 20px"},
+    h("summary", null, `Проходной балл: ${cfg.pass}%` + (cfg.method === "angoff" ? " · установлен методом Ангоффа" : " · по умолчанию")),
+    h("p", {class:"hint"}, "Метод Ангоффа: для каждого задания укажите, какой процент «минимально подготовленных» студентов, по вашей оценке, выполнит его верно. Среднее по заданиям — обоснованный проходной балл. Надёжнее, если оценки независимо дадут 3–5 преподавателей, а в форму внести их среднее."),
+    list,
+    h("div", {class:"row"}, h("span", null, "Расчётный проходной балл: ", out), h("span", {class:"spacer"}), status,
+      h("button", {class:"btn", onclick: async () => { const p = calc(); if (p == null){ status.textContent = "Заполните оценки для всех заданий."; return; }
+        try { await withTimeout(db.doc("config/ch" + ch).set({pass: p, angoff: vals, method: "angoff", at: new Date().toISOString()}), 10000); config[ch] = {pass: p, angoff: vals, method: "angoff"}; drawAnalytics(box, config[ch]); }
+        catch(e){ status.textContent = "Не удалось сохранить. Попробуйте ещё раз."; } }}, "Сохранить проходной балл")));
+}
+
+async function exportCsv(ch, tries){
+  const qs = BANK[ch], esc = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const head = ["Студент","Вуз","Группа","Режим","Дата","Результат, %","Балл уверенности", ...qs.map((q, j) => `Задание ${j + 1} (${q.ro}, Блум ${q.bloom})`), ...qs.map((q, j) => `Уверенность ${j + 1}`)];
+  const rows = tries.slice().sort((a, b) => a.at < b.at ? -1 : 1).map(t => [(an.names[t.sid] && an.names[t.sid].name) || "Студент", t.uni, t.group, MODES[t.mode] || t.mode,
+    new Date(t.at).toLocaleString("ru-RU"), t.score, String(t.cbm || 0).replace(".", ","), ...qs.map(q => t.items && t.items[q.id] != null ? String(t.items[q.id]).replace(".", ",") : ""), ...qs.map(q => (t.conf && t.conf[q.id]) || "")]);
+  const csv = "﻿" + [head, ...rows].map(r => r.map(esc).join(";")).join("\r\n");
+  if (!downloads){ alertBox("Выгрузка недоступна в этом окне. Откройте тренажёр в браузере на claude.ai."); return; }
+  try { await downloads.save({filename: `trener-glava-${ch}-${new Date().toISOString().slice(0, 10)}.csv`, data: csv}); }
+  catch(e){ if (e && e.code !== "cancelled" && e.code !== "declined") alertBox("Файл не сохранён. Попробуйте ещё раз."); }
+}
+function alertBox(msg){ const n = h("div", {class:"note", role:"status"}, msg); app.prepend(n); window.scrollTo(0, 0); setTimeout(() => n.remove(), 6000); }
+
+render();
+})();
+</script>
